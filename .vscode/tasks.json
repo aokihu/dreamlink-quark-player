@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "C: gcc build active file",
+			"command": "/usr/bin/gcc -g -Wall main.c -o qplayer $(pkg-config --cflags --libs glib-2.0)",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/clang"
+		}
+	]
+}
