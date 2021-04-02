@@ -20,13 +20,13 @@
  */
 typedef enum _QP_CMD_OPTION_OUTPUT_TYPE
 {
-  QP_OUTPUT_TYPE_NET = 0,
-  QP_OUTPUT_TYPE_LOCAL = 1,
-} QP_CMD_OPTION_OUTPUT_TYPE;
+  QP_OPTION_OUTPUT_TYPE_NET,
+  QP_OPTION_OUTPUT_TYPE_LOCAL,
+} QP_OPTION_OUTPUT_TYPE;
 
 // 定义输出模式的字符串形式
-static const gchar *QP_CMD_OPTION_OUTPUT_TYPE_NET = "net";
-static const gchar *QP_CMD_OPTION_OUTPUT_TYPE_LOCAL = "local";
+#define QP_OPTION_OUTPUT_TYPE_LENGTH 2
+static const gchar *QP_OPTION_STRING_OUTPUT_TYPE[] = {"net", "local"};
 
 /**
  * 网络播放质量配置
@@ -36,16 +36,15 @@ static const gchar *QP_CMD_OPTION_OUTPUT_TYPE_LOCAL = "local";
  * @enum QP_OPTION_QUALITY_HIGH 最高品质输出，带宽最高，延迟可能加长
  */
 
-typedef enum _QP_CMD_OPTION_QUALITY
+typedef enum _QP_OPTION_QUALITY
 {
   QP_OPTION_QUALITY_LOW,
-  QP_OPTION_QUALITY_NORNAL,
+  QP_OPTION_QUALITY_NORMAL,
   QP_OPTION_QUALITY_HIGH,
-} QP_CMD_OPTION_QUALITY;
+} QP_OPTION_QUALITY;
 
-static const gchar *QP_CMD_OPTION_QUALITY_LOW = "low";
-static const gchar *QP_CMD_OPTION_QUALITY_NORMAL = "normal";
-static const gchar *QP_CMD_OPTION_QUALITY_HIGH = "high";
+#define QP_OPTION_QUALITY_LENGTH 3
+static const gchar *QP_OPTION_STRING_QUALITY[] = {"low", "normal", "high"};
 
 /**
  * 全局配置数据结构
@@ -63,8 +62,8 @@ typedef struct _QP_PROGRAM_OPTION
   guint volume;
   guint card;
   guint card_sub;
-  QP_CMD_OPTION_OUTPUT_TYPE output;
-  QP_CMD_OPTION_QUALITY quality;
+  QP_OPTION_OUTPUT_TYPE output;
+  QP_OPTION_QUALITY quality;
 
 } QP_PROGRAM_OPTION;
 

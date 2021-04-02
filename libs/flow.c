@@ -56,11 +56,11 @@ extern void qp_flow_display_summary()
   GString_autoptr output = g_string_new(NULL);
 
   // 设置输出模式显示
-  if (qp_g_program_option.output == QP_OUTPUT_TYPE_NET)
+  if (qp_g_program_option.output == QP_OPTION_OUTPUT_TYPE_NET)
   {
     g_string_append_printf(output, "net");
   }
-  else if (qp_g_program_option.output == QP_OUTPUT_TYPE_LOCAL)
+  else if (qp_g_program_option.output == QP_OPTION_OUTPUT_TYPE_LOCAL)
   {
     g_string_append_printf(output, "local");
   }
@@ -70,10 +70,29 @@ extern void qp_flow_display_summary()
                          "Quark player - %s\n"
                          "Copyright for Reasonbox, only be used on Dreamlink devices\n"
                          "Initialization volume: %d\n"
-                         "Output mode: %s",
+                         "Output mode: %s\n",
                          version->str,
                          qp_g_program_option.volume,
                          output->str);
+
+  // 当模式是[local]时候输出声卡信息
+  if (qp_g_program_option.output == QP_OPTION_OUTPUT_TYPE_LOCAL)
+  {
+    g_string_append_printf(summary,
+                           "Sound card: %d\n"
+                           "Sound subdevice: %d\n",
+                           qp_g_program_option.card,
+                           qp_g_program_option.card_sub);
+  }
+
+  // 当模式是[net]时候输出的额外信息
+  if (qp_g_program_option.output == QP_OPTION_OUTPUT_TYPE_NET)
+  {
+    g_string_append_printf(summary,
+                           "Quality: %s\n",
+                           QP_OPTION_STRING_QUALITY[qp_g_program_option.quality]);
+  }
+
   // 打印数据
   g_print("%s", summary->str);
 
