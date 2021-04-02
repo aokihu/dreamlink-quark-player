@@ -8,14 +8,17 @@
       "name": "clang",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}/qplay",
-      "args": [],
+      "program": "${fileDirname}/qplayer",
+      "args": [
+        "-o",
+        "net"
+      ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
       "MIMode": "lldb",
-      "preLaunchTask": "C/C++: clang build active file"
+      "preLaunchTask": "C: gcc build active file"
     }
   ]
 }

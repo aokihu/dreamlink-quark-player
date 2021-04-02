@@ -1,0 +1,10 @@
+{
+  "C_Cpp.errorSquiggles": "Disabled",
+  "files.associations": {
+    "*.vue": "vue",
+    "glib.h": "c",
+    "gio.h": "c",
+    "qp_version.c": "cpp",
+    "option.h": "c"
+  }
+}
