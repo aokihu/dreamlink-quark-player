@@ -1,4 +1,4 @@
-#include "../headers/version.h"
+#include "version.h"
 
 /**
  * qp_get_software_version()
@@ -9,7 +9,7 @@
  *
  * @since 0.1
  */
-extern GString *qp_get_software_version()
+GString *qp_get_software_version()
 {
   GString_autoptr version = g_string_new(NULL);
   g_string_printf(version, "%d.%d.%d",

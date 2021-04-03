@@ -1,10 +1,10 @@
 /**
+ * 
  * 命令行参数解析头文件定义
  * @author aokihu
  * @copyright Reasonbox
  * 
  */
-
 #include <glib.h>
 
 #ifndef QP_H_COMMANDLINE
@@ -70,5 +70,22 @@ typedef struct _QP_PROGRAM_OPTION
   QP_OPTION_QUALITY quality;
 
 } QP_PROGRAM_OPTION;
+
+/**
+ * 全局范围参数配置
+ */
+
+static QP_PROGRAM_OPTION
+    qp_g_program_option =
+        {
+            .silent = FALSE,
+            .volume = 60,
+            .card = 0,
+            .card_sub = 0,
+            .uri = NULL,
+            .fadetime = 0,
+            .output = QP_OPTION_OUTPUT_TYPE_NET,
+            .quality = QP_OPTION_QUALITY_NORMAL,
+};
 
 #endif

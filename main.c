@@ -6,6 +6,7 @@
  * @version 1.0.0
  * 
  */
+
 #include "libs.h"
 
 int main(gint argc, gchar **argv)
@@ -27,8 +28,12 @@ int main(gint argc, gchar **argv)
   //
   // 全局事件循环
   //
-  GMainLoop *loop = g_main_loop_new(NULL, FALSE);
-  g_main_loop_run(loop);
+  qp_application.mainLoop = g_main_loop_new(NULL, FALSE);
+  qp_application.mainContext = g_main_context_default();
+
+  // 启动主循环
+  g_main_loop_run(qp_application.mainLoop);
+  g_main_loop_unref(qp_application.mainLoop);
 
   return 0;
 }
