@@ -151,4 +151,23 @@ static GOptionEntry qp_g_option_entries[] = {
         "Set quality of stream when mode is [net]",
         "[low|normal|high]",
     },
+    /** URI **/
+    {
+        "uri",
+        'u',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_STRING,
+        &(qp_g_program_option.uri),
+        "The media resource URI",
+        "[http://|file://]",
+    },
+    {
+        "fade",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &(qp_g_program_option.fadetime),
+        "Set volume fadein time, default is 0 which mean no fadein, unit is <seconds>",
+        "N",
+    },
     {NULL}};

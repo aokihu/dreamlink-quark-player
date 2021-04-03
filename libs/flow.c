@@ -93,8 +93,13 @@ extern void qp_flow_display_summary()
                            QP_OPTION_STRING_QUALITY[qp_g_program_option.quality]);
   }
 
+  // 输出URI信息
+  g_string_append_printf(summary,
+                         "URI: %s\n",
+                         qp_g_program_option.uri);
+
   // 打印数据
-  g_print("%s", summary->str);
+  g_print("%s\n\n", summary->str);
 
   // 释放资源
   g_string_free(output, TRUE);

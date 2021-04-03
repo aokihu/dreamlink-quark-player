@@ -13,6 +13,16 @@ Dreamlink Quark Player 说明文档
 
 ## 命令参数定义
 
+### --uri 媒体资源地址
+*** 缩写 -u ***
+
+设置媒体资源的网络地址或者本地文件的路径，如果是本地路径必须是绝对路径，**不能**使用相对路径
+
+```bash
+qplayer -u http://mp3.baidu.com/sample.mp3
+qplayer -u file:///home/qplayer/sample.mp3
+```
+
 ### --silent 静默模式
 ***缩写 -s***
 
@@ -43,7 +53,7 @@ qplayer --output local # 输出到本地声卡
 qplayer --volume 30
 ```
 
-### --quality 这是网络输出的质量
+### --quality 设置网络输出的质量
 ***缩写 -q***
 设置网络播放模式下输出的质量，有`low``normal`和`high`
 
@@ -53,4 +63,12 @@ qplayer --volume 30
 
 ```bash
 qplayer --quality low
+```
+
+## --fade 设置声音渐入时间
+
+设置声音渐入的时间，单位是<秒>，默认是0表示没有渐入效果，最大为30
+
+```bash
+qplayer --fade 10 # 10秒时间渐入效果
 ```

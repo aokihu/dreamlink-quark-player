@@ -53,7 +53,9 @@ static const gchar *QP_OPTION_STRING_QUALITY[] = {"low", "normal", "high"};
  * @volume 初始播放音量,整数类型
  * @output 输出模式选择,默认为网络输出[net]
  * @card 当输出模式是[local]的时候,设置声卡硬件编号,默认为0
- * @card_sub 当输出模式是[local]的时候，设置声卡硬件子设备编号,默认为0
+ * @card_sub 当输出模式是[local]的时候,设置声卡硬件子设备编号,默认为0
+ * @uri 媒体资源URI地址,本地文件需要绝对地址
+ * @fadetime 声音渐响的时间,单位是<秒>,默认是0表示没有渐响
  * @quality 设置网络输出的品质 
  */
 typedef struct _QP_PROGRAM_OPTION
@@ -62,6 +64,8 @@ typedef struct _QP_PROGRAM_OPTION
   guint volume;
   guint card;
   guint card_sub;
+  gchar *uri;
+  gint fadetime;
   QP_OPTION_OUTPUT_TYPE output;
   QP_OPTION_QUALITY quality;
 
