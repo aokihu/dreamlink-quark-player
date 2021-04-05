@@ -4,7 +4,8 @@
     "*.vue": "vue",
     "glib.h": "c",
     "gio.h": "c",
-    "qp_version.c": "cpp",
-    "option.h": "c"
-  }
+    "option.h": "c",
+    "common.h": "c"
+  },
+  "C_Cpp.dimInactiveRegions": true
 }
