@@ -2,10 +2,11 @@
 #define QP_INCLUDE_LIBS 0
 
 // 所有头文件
-#include "libs/version.c"
+#include "libs/version.h"
 #include "libs/global.h"
-#include "libs/option.c"
-#include "libs/flow.c"
+#include "libs/option.h"
+#include "libs/player.h"
+#include "libs/flow.h"
 
 // 第三方库文件引入
 #include <stdio.h>

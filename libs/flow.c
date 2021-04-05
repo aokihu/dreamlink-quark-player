@@ -2,7 +2,8 @@
  * 程序执行流程
  */
 
-#include "../libs.h"
+#include "version.h"
+#include "option.h"
 
 /**
  * @flow Parse_Commandline

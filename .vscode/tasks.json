@@ -4,7 +4,7 @@
 		{
 			"type": "shell",
 			"label": "C: gcc build active file",
-			"command": "/usr/bin/gcc -g -Wall main.c -o qplayer $(pkg-config --cflags --libs glib-2.0 gstreamer-1.0)",
+			"command": "/usr/bin/gcc -g -Wall $(ls ./libs/*.c) main.c -o qplayer $(pkg-config --cflags --libs glib-2.0 gstreamer-1.0)",
 			"args": [],
 			"options": {
 				"cwd": "${workspaceFolder}"

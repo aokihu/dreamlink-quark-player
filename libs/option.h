@@ -88,4 +88,114 @@ static QP_PROGRAM_OPTION
             .quality = QP_OPTION_QUALITY_NORMAL,
 };
 
+//
+// 私有方法定义
+//
+
+// 检查参数辅助方法
+gboolean qp_option_helper(gpointer target,
+                          const gchar *value,
+                          const gchar **options_chars,
+                          guint length);
+
+// 检查输出模式
+gboolean qp_option_check_output(
+    const gchar *option_name,
+    const gchar *value,
+    gpointer data,
+    GError *error);
+
+// 检查品质设置参数
+gboolean qp_option_check_quality(
+    const gchar *option_name,
+    const gchar *value,
+    gpointer data,
+    GError *error);
+
+/**
+ * 定义命令行解析参数
+ */
+
+static GOptionEntry qp_g_option_entries[] = {
+    /** 静默设置 **/
+    {
+        "silent",
+        's',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_NONE,
+        &(qp_g_program_option.silent),
+        "Disable print runtime info",
+        NULL,
+    },
+    /** 音量设置 **/
+    {
+        "volume",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &(qp_g_program_option.volume),
+        "Set volume, range from 0 to 100",
+        "N",
+    },
+    /** 输出模式设置 **/
+    {
+        "output",
+        'o',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)&qp_option_check_output,
+        "Choose output mode",
+        "[net|local]",
+    },
+    /** 声卡编号设置 **/
+    {
+        "card",
+        'c',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &(qp_g_program_option.card),
+        "Set card number when output mode is [local], default is 0",
+        "N",
+    },
+    /** 声卡子设备编号设置 **/
+    {
+        "card-sub",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &(qp_g_program_option.card_sub),
+        "Set card subdevice number when output mode is [local], default is 0",
+        "N",
+    },
+    /** 网络输出品质设置 **/
+    {
+        "quality",
+        'q',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)&qp_option_check_quality,
+        "Set quality of stream when mode is [net]",
+        "[low|normal|high]",
+    },
+    /** URI **/
+    {
+        "uri",
+        'u',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_STRING,
+        &(qp_g_program_option.uri),
+        "The media resource URI",
+        "[http://|file://]",
+    },
+    {
+        "fade",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &(qp_g_program_option.fadetime),
+        "Set volume fadein time, default is 0 which mean no fadein, unit is <seconds>",
+        "N",
+    },
+    {NULL}};
+
 #endif
