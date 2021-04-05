@@ -11,6 +11,7 @@
 #ifndef QP_H_PLAYER
 #define QP_H_PLAYER
 
+#include "setting.h"
 #include <glib.h>
 
 /**
@@ -22,22 +23,25 @@
  * @property opt_port UDP广播端口
  * @property opt_address UDP广播地址
  */
-struct _QP_Player
+typedef struct _QP_Player
 {
   // 状态定义
   gboolean status_ready;
   gboolean status_playing;
 
   // 参数定义
+  GString *opt_uri;
   guint opt_port;
-  gchar *opt_address;
+  GString *opt_address;
+  QP_SET_QUALITY opt_quality;
+  QP_SET_OUTPUT_TYPE opt_output;
 } QP_Player;
 
 //
 // 公开方法
 //
 extern QP_Player *qp_player_new();
-extern void qp_player_init();
+extern void qp_player_init(QP_Player *, QP_CmdParam *);
 extern void qp_player_set_port(gint port);
 extern void qp_player_set_address(gchar *address);
 

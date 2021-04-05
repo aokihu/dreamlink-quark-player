@@ -12,5 +12,9 @@
 
 int main(gint argc, gchar **argv)
 {
+
+  // 初始化全局应用对象
+  static QP_Application *QP_Application = g_newa(QP_Application, 1);
+
   exit(0);
 }
