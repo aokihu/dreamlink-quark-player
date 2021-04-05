@@ -8,6 +8,7 @@
  */
 #include "option.h"
 #include <gst/gst.h>
+
 #ifndef QP_H_PLAYER
 #define QP_H_PLAYER
 

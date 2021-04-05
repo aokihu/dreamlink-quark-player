@@ -28,10 +28,10 @@ typedef struct _QP_STRUCT_APPLICATION
 /**
  * 定义全局静态应用程序数据对象
  */
-static QP_APPLICATION qp_application
-{
-  .mainContext = NULL,
-  .mainLoop = NULL,
-}
+static QP_APPLICATION qp_application =
+    {
+        .mainContext = NULL,
+        .mainLoop = NULL,
+};
 
 #endif
