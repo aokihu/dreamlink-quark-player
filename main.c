@@ -12,9 +12,6 @@
 
 int main(gint argc, gchar **argv)
 {
-  // 解析命令行参数
-  QP_CmdParam *param = qp_flow_parse_cmdline(argc, argv);
-
   // 初始化全局应用对象
   QP_Application *application;
   application = g_new(QP_Application, 1);
@@ -24,6 +21,9 @@ int main(gint argc, gchar **argv)
 
   application->mainLoop = g_main_loop_new(NULL, FALSE);
   application->mainContext = g_main_loop_get_context(application->mainLoop);
+
+  // Boot
+  qp_boot(argc, argv, application);
 
   // 主循环运行
   g_main_loop_run(application->mainLoop);

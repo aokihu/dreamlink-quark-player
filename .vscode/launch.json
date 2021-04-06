@@ -10,8 +10,8 @@
       "request": "launch",
       "program": "${fileDirname}/qplayer",
       "args": [
-        "-o",
-        "net"
+        "--uri",
+        "http://www.mp3"
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

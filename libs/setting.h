@@ -41,12 +41,14 @@ typedef enum _QP_SET_QUALITY
  */
 typedef struct _QP_CMD_PARAM
 {
-  gchar *uri;
-  gint port;
-  gchar *address;
-  gchar *output;
-  gchar *quality;
+  guint port;
   guint volume;
+  guint card;
+  guint card_sub;
+  GString *uri;
+  GString *address;
+  QP_SET_OUTPUT_TYPE output;
+  QP_SET_QUALITY quality;
 
 } QP_CmdParam;
 

@@ -28,52 +28,27 @@ QP_Player *qp_player_new()
  */
 void qp_player_init(QP_Player *player, QP_CmdParam *params)
 {
-  player->opt_port = 0;
-  player->opt_address = g_string_new(NULL);
   player->status_playing = FALSE;
 
   // 设置URI
-  gchar *uri = params->uri;
-  g_assert_nonnull(uri);
-  player->opt_uri = g_string_new(params->uri);
-
-  // 设置输出模式
-  if (g_ascii_strcasecmp("net", params->output) == 0)
-  {
-    player->opt_output = QP_SET_OUTPUT_TYPE_NET;
-  }
-  else if (g_ascii_strcasecmp("local", params->output) == 0)
-  {
-    player->opt_output = QP_SET_OUTPUT_TYPE_LOCAL;
-  }
-  else
-  {
-    player->opt_output = QP_SET_OUTPUT_TYPE_NET;
-  }
+  player->opt_uri = g_string_new(params->uri->str);
 
   // 设置输出质量
-  if (player->opt_output == QP_SET_OUTPUT_TYPE_NET)
+  player->opt_quality = params->quality;
+
+  // 设置播放器输出模式
+  player->opt_output = params->output;
+
+  switch (player->opt_output)
   {
-    if (g_ascii_strcasecmp("low", params->quality) == 0)
-    {
-      player->opt_quality = QP_SET_QUALITY_LOW;
-    }
-    else if (g_ascii_strcasecmp("normal", params->quality) == 0)
-    {
-      player->opt_quality = QP_SET_QUALITY_NORMAL;
-    }
-    else if (g_ascii_strcasecmp("high", params->quality) == 0)
-    {
-      player->opt_quality = QP_SET_QUALITY_HIGH;
-    }
-    else
-    {
-      player->opt_quality = QP_SET_QUALITY_NORMAL;
-    }
-  }
-  else
-  {
-    player->opt_quality = QP_SET_QUALITY_NORMAL;
+  case QP_SET_OUTPUT_TYPE_NET:
+    player->opt_address = g_string_new(params->address->str);
+    player->opt_port = params->port;
+    break;
+  case QP_SET_OUTPUT_TYPE_LOCAL:
+    player->card = params->card;
+    player->card_sub = params->card_sub;
+    break;
   }
 
   // 播放器出于准备状态

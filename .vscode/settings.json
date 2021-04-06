@@ -1,12 +1,16 @@
 {
   "C_Cpp.errorSquiggles": "Disabled",
   "files.associations": {
+    "*.vue": "vue",
     "glib.h": "c",
     "gio.h": "c",
     "option.h": "c",
     "common.h": "c",
     "algorithm": "c",
-    "random": "c"
+    "random": "c",
+    "boot.h": "c",
+    "memory": "c",
+    "player.h": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }
