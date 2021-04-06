@@ -4,7 +4,9 @@
     "glib.h": "c",
     "gio.h": "c",
     "option.h": "c",
-    "common.h": "c"
+    "common.h": "c",
+    "algorithm": "c",
+    "random": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }

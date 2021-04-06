@@ -12,12 +12,14 @@
 
 int main(gint argc, gchar **argv)
 {
+  // 解析命令行参数
+  QP_CmdParam *param = qp_flow_parse_cmdline(argc, argv);
+
   // 初始化全局应用对象
   QP_Application *application;
   application = g_new(QP_Application, 1);
 
   QP_Player *player = g_new(QP_Player, 1);
-
   application->player = player;
 
   application->mainLoop = g_main_loop_new(NULL, FALSE);

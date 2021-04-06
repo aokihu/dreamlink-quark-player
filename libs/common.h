@@ -10,6 +10,7 @@
 
 #include "application.h"
 #include "player.h"
+#include "flow.h"
 
 #include <glib.h>
 #include <gst/gst.h>
