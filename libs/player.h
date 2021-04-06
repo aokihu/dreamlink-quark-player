@@ -13,6 +13,7 @@
 
 #include "setting.h"
 #include <glib.h>
+#include <gst/gst.h>
 
 /**
  * 
@@ -37,6 +38,12 @@ typedef struct _QP_Player
   guint card_sub;
   QP_SET_QUALITY opt_quality;
   QP_SET_OUTPUT_TYPE opt_output;
+
+  // GStreamer对象
+  GstPipeline *gst_pipeline;
+  GstBus *gst_bus;
+  GstElement *gst_source;
+  GstElement *gst_sink;
 } QP_Player;
 
 //
@@ -44,6 +51,10 @@ typedef struct _QP_Player
 //
 extern QP_Player *qp_player_new();
 extern void qp_player_init(QP_Player *, QP_CmdParam *);
+extern void qp_player_play();
+extern void qp_player_stop();
+extern void qp_player_pause();
+extern void qp_player_resume();
 extern void qp_player_set_port(gint port);
 extern void qp_player_set_address(gchar *address);
 

@@ -296,6 +296,7 @@ void qp_flow_set_env(QP_Application *app)
 extern void qp_boot(gint argc, gchar **argv, QP_Application *app)
 {
   qp_flow_parse_cmdline(argc, argv);
+
   if (qp_cmdopt_uri == NULL)
   {
     g_printerr("Please input uri. type 'qplayer -h' show more help\n");

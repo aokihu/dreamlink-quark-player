@@ -25,6 +25,9 @@ int main(gint argc, gchar **argv)
   // Boot
   qp_boot(argc, argv, application);
 
+  // Gstreamer初始化
+  gst_init(NULL, NULL);
+
   // 主循环运行
   g_main_loop_run(application->mainLoop);
 

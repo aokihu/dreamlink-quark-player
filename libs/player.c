@@ -54,3 +54,10 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   // 播放器出于准备状态
   player->status_ready = TRUE;
 }
+
+/**
+ * 播放器播放
+ */
+void qp_player_play()
+{
+}
