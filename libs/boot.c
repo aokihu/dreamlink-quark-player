@@ -12,6 +12,7 @@ static guint qp_cmdopt_card = 0;
 static guint qp_cmdopt_card_sub = 0;
 static guint qp_cmdopt_volume = 60;
 static gboolean qp_cmdopt_silent = FALSE;
+static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;
 static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET;
 static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;
 
@@ -44,6 +45,16 @@ gboolean qp_boot_cmdopt_check(
   {
     qp_cmdopt_address = g_string_new(value);
     return TRUE;
+  }
+
+  // 检查<input>参数
+  if (!g_ascii_strcasecmp("--input", option_name) || !g_ascii_strcasecmp("-i", option_name))
+  {
+    if (!g_ascii_strcasecmp("udp", value))
+    {
+      qp_cmdopt_input = QP_SET_INPUT_TYPE_UDP;
+      return TRUE;
+    }
   }
 
   // 检查<output>参数
@@ -95,13 +106,20 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         "Media resource uri",
         "[uri://...]",
     },
+    {"input",
+     'o',
+     G_OPTION_FLAG_NONE,
+     G_OPTION_ARG_CALLBACK,
+     (GOptionArgFunc *)qp_boot_cmdopt_check,
+     "Choose input mode, default is [uri]",
+     "'uri'|'fd'"},
     {
         "output",
         'o',
         G_OPTION_FLAG_NONE,
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
-        "Choose output mode",
+        "Choose output mode, default is [net]",
         "'net'|'local'",
     },
     {
@@ -273,6 +291,7 @@ void qp_flow_set_env(QP_Application *app)
   params->uri = qp_cmdopt_uri;
   params->address = qp_cmdopt_address != NULL ? qp_cmdopt_address : g_string_new("234.1.1.1");
   params->port = qp_cmdopt_port;
+  params->input = qp_cmdopt_input;
   params->output = qp_cmdopt_output;
   params->quality = qp_cmdopt_quality;
   params->volume = qp_cmdopt_volume;
@@ -305,4 +324,5 @@ extern void qp_boot(gint argc, gchar **argv, QP_Application *app)
 
   qp_flow_set_env(app);
   qp_flow_print_env(app);
+  qp_slave_prepare(app);
 }

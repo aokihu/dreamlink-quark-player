@@ -12,7 +12,34 @@
 #include "player.h"
 
 /**
+ * 构造中间输出组件
+ * @private
+ * 
+ * 构造Source和Sink之间的处理组件
+ * 中间组件用来处理通用的音效处理
+ * 
+ * - volume 音量控制
+ * - audioconvert 音乐转换
+ * - audiorate 
+ * 
+ */
+
+void qp_player_construct_middle_component(QP_Player *player)
+{
+  GstElement *volume = gst_element_factory_make("volume", QP_PLAYER_ELEMENT_VOLUME);
+}
+
+/**
+ * 构造音乐播放器组件
+ * @private
+ */
+void qp_player_constrcut_components(QP_Player *player)
+{
+}
+
+/**
  * 创建新播放器对象
+ * @public
  * @return QP_Player* 播放器对象指针
  */
 QP_Player *qp_player_new()
@@ -24,6 +51,7 @@ QP_Player *qp_player_new()
 
 /**
  * 初始化播放器
+ * @public
  * @param player 播放器对象
  */
 void qp_player_init(QP_Player *player, QP_CmdParam *params)
@@ -35,6 +63,9 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
 
   // 设置输出质量
   player->opt_quality = params->quality;
+
+  // 设置播放器输入模式
+  player->opt_input = params->input;
 
   // 设置播放器输出模式
   player->opt_output = params->output;
@@ -51,22 +82,17 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
     break;
   }
 
+  // 构造各个组件
+  qp_player_constrcut_components(player);
+
   // 播放器出于准备状态
   player->status_ready = TRUE;
 }
 
 /**
  * 播放器播放
+ * @public
  */
 extern void qp_player_play(QP_Player *player)
 {
-  g_print("playing...\n");
-  player->gst_source = gst_element_factory_make("playbin", "play");
-  g_assert_nonnull(player->gst_source);
-  // player->gst_sink = gst_element_factory_make("autodetect", "autoaudiosink");
-  // g_assert_nonnull(player->gst_sink);
-
-  g_object_set(G_OBJECT(player->gst_source), "uri", player->opt_uri->str, NULL);
-
-  gst_element_set_state(GST_ELEMENT(player->gst_source), GST_STATE_PLAYING);
 }

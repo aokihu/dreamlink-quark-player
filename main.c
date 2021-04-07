@@ -40,7 +40,10 @@ int main(gint argc, gchar **argv)
 
   // 释放资源
   g_main_loop_unref(application->mainLoop);
-  g_free(application->mainContext);
+
+  g_object_unref(application->player->gst_pipeline);
+  g_main_loop_unref(application->mainLoop);
+  g_main_context_unref(application->mainContext);
   g_free(application);
 
   exit(0);

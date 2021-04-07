@@ -15,6 +15,11 @@
 #include <glib.h>
 #include <gst/gst.h>
 
+#define QP_PLAYER_ELEMENT_SRC "src"
+#define QP_PLAYER_ELEMENT_AUDIOCONVERT "audioconvert"
+#define QP_PLAYER_ELEMENT_AUDIORATE "audiorate"
+#define QP_PLAYER_ELEMENT_VOLUME "volume"
+
 /**
  * 
  * 播放器结构体定义
@@ -37,13 +42,13 @@ typedef struct _QP_Player
   guint card;
   guint card_sub;
   QP_SET_QUALITY opt_quality;
+  QP_SET_INPUT_TYPE opt_input;
   QP_SET_OUTPUT_TYPE opt_output;
 
   // GStreamer对象
   GstPipeline *gst_pipeline;
-  GstBus *gst_bus;
-  GstElement *gst_source;
-  GstElement *gst_sink;
+  GstElement *gst_source_bin;
+  GstElement *gst_sink_bin;
 } QP_Player;
 
 //

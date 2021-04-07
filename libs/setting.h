@@ -14,13 +14,23 @@
 #include <glib.h>
 
 /**
+ * 输入方式类型枚举
+ * @enum QP_SET_INPUT_TYPE
+ */
+typedef enum _QP_SET_INPUT_TYPE
+{
+  QP_SET_INPUT_TYPE_URI, // 使用URI作为输入
+  QP_SET_INPUT_TYPE_UDP, // 使用fd文件描述符作为输入
+} QP_SET_INPUT_TYPE;
+
+/**
  * 输出类型枚举
  * @enum QP_SET_OUTPUT_TYPE
  */
 typedef enum _QP_SET_OUTPUT_TYPE
 {
-  QP_SET_OUTPUT_TYPE_NET,
-  QP_SET_OUTPUT_TYPE_LOCAL,
+  QP_SET_OUTPUT_TYPE_NET,   // 网络广播输出
+  QP_SET_OUTPUT_TYPE_LOCAL, // 本地声卡输出
 } QP_SET_OUTPUT_TYPE;
 
 /**
@@ -47,6 +57,7 @@ typedef struct _QP_CMD_PARAM
   guint card_sub;
   GString *uri;
   GString *address;
+  QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;
 

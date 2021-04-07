@@ -12,7 +12,8 @@
     "memory": "c",
     "player.h": "c",
     "version.h": "c",
-    "application.h": "c"
+    "application.h": "c",
+    "slave.h": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }
