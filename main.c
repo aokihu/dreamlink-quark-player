@@ -10,6 +10,8 @@
 
 #include "libs/common.h"
 
+static QP_Application *application;
+
 int main(gint argc, gchar **argv)
 {
   // Gstreamer初始化
@@ -20,8 +22,7 @@ int main(gint argc, gchar **argv)
   }
 
   // 初始化全局应用对象
-  QP_Application *application;
-  application = g_new(QP_Application, 1);
+  application = g_newa(QP_Application, 1);
 
   QP_Player *player = g_new(QP_Player, 1);
   application->player = player;
@@ -34,6 +35,7 @@ int main(gint argc, gchar **argv)
 
   // 播放
   qp_player_play(application->player);
+  g_print("Boot...\n");
 
   // 主循环运行
   g_main_loop_run(application->mainLoop);
@@ -41,10 +43,9 @@ int main(gint argc, gchar **argv)
   // 释放资源
   g_main_loop_unref(application->mainLoop);
 
-  g_object_unref(application->player->gst_pipeline);
-  g_main_loop_unref(application->mainLoop);
-  g_main_context_unref(application->mainContext);
-  g_free(application);
+  // g_main_loop_unref(application->mainLoop);
+  // g_main_context_unref(application->mainContext);
+  // g_free(application);
 
-  exit(0);
+  return 0;
 }

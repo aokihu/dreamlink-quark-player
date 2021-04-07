@@ -44,7 +44,7 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
                               GIOCondition condition,
                               gpointer data)
 {
-  QP_Application *app = (QP_Application *)app;
+  QP_Application *app = (QP_Application *)data;
   GError *error = NULL;
   GString *message = g_string_new(NULL);
 

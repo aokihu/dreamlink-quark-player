@@ -26,7 +26,7 @@
 
 void qp_player_construct_middle_component(QP_Player *player)
 {
-  GstElement *volume = gst_element_factory_make("volume", QP_PLAYER_ELEMENT_VOLUME);
+  // GstElement *volume = gst_element_factory_make("volume", QP_PLAYER_ELEMENT_VOLUME);
 }
 
 /**
