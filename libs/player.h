@@ -51,7 +51,7 @@ typedef struct _QP_Player
 //
 extern QP_Player *qp_player_new();
 extern void qp_player_init(QP_Player *, QP_CmdParam *);
-extern void qp_player_play();
+extern void qp_player_play(QP_Player *);
 extern void qp_player_stop();
 extern void qp_player_pause();
 extern void qp_player_resume();

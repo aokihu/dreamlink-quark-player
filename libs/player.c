@@ -58,6 +58,15 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
 /**
  * 播放器播放
  */
-void qp_player_play()
+extern void qp_player_play(QP_Player *player)
 {
+  g_print("playing...\n");
+  player->gst_source = gst_element_factory_make("playbin", "play");
+  g_assert_nonnull(player->gst_source);
+  // player->gst_sink = gst_element_factory_make("autodetect", "autoaudiosink");
+  // g_assert_nonnull(player->gst_sink);
+
+  g_object_set(G_OBJECT(player->gst_source), "uri", player->opt_uri->str, NULL);
+
+  gst_element_set_state(GST_ELEMENT(player->gst_source), GST_STATE_PLAYING);
 }

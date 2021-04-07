@@ -12,6 +12,13 @@
 
 int main(gint argc, gchar **argv)
 {
+  // Gstreamer初始化
+  gboolean gst_ok = gst_init_check(&argc, &argv, NULL);
+  if (!gst_ok)
+  {
+    g_printerr("Gstreamer is not OK\n");
+  }
+
   // 初始化全局应用对象
   QP_Application *application;
   application = g_new(QP_Application, 1);
@@ -25,8 +32,8 @@ int main(gint argc, gchar **argv)
   // Boot
   qp_boot(argc, argv, application);
 
-  // Gstreamer初始化
-  gst_init(NULL, NULL);
+  // 播放
+  qp_player_play(application->player);
 
   // 主循环运行
   g_main_loop_run(application->mainLoop);

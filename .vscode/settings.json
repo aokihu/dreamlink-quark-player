@@ -10,7 +10,9 @@
     "random": "c",
     "boot.h": "c",
     "memory": "c",
-    "player.h": "c"
+    "player.h": "c",
+    "version.h": "c",
+    "application.h": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }
