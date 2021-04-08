@@ -1,5 +1,4 @@
 #include "slave.h"
-#include <unistd.h>
 
 //
 // 全局静态变量定义

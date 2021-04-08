@@ -8,6 +8,9 @@
  */
 
 #include "application.h"
+#include "player.h"
+
+#include <unistd.h>
 #include <glib.h>
 #include <gio/gio.h>
 
