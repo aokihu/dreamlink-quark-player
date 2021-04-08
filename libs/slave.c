@@ -1,15 +1,26 @@
 #include "slave.h"
 #include <unistd.h>
 
-void qp_slave_process_command(QP_SlaveCommand *cmd, QP_Application *app)
-{
+//
+// 全局静态变量定义
+//
 
-  switch (cmd->command)
-  {
-  case QP_SLAVE_COMMAND_QUIT:
-    g_main_loop_quit(app->mainLoop);
-    break;
-  }
+static QP_SlaveCommandItem QP_SLAVE_COMMAND_LIST[] = {
+    {"quit", qp_slave_cb_quit},
+    {NULL},
+};
+
+/**
+ * 处理退出程序的回掉方法
+ * @private
+ * @param cmd 解析后的命令数据包
+ * @param data 附加的数据，一般就是application
+ * @return void
+ */
+void qp_slave_cb_quit(QP_SlaveCommand *cmd, gpointer data)
+{
+  QP_Application *app = data;
+  g_main_loop_quit(app->mainLoop);
 }
 
 /**
@@ -23,16 +34,31 @@ void qp_slave_parse_command(GString *message, QP_Application *app)
 
   QP_SlaveCommand *cmd = g_new(QP_SlaveCommand, 1);
 
+  // 分析指令字符串
   for (gint i = 0; i < sizeof(QP_SLAVE_COMMANDS); i++)
   {
     if (!g_strcmp0(_command[0], QP_SLAVE_COMMANDS[i]))
     {
+      cmd->raw_command = _command[0];
       cmd->command = i;
       break;
     }
   }
 
-  qp_slave_process_command(cmd, app);
+  // 遍历指令处理集合
+  for (gint i = 0; TRUE; i++)
+  {
+    QP_SlaveCommandItem arg = QP_SLAVE_COMMAND_LIST[i];
+
+    if (arg.cmd_name != NULL)
+    {
+      (arg.func)(cmd, app);
+      continue;
+    }
+
+    break;
+  }
+
   g_free(cmd);
 }
 

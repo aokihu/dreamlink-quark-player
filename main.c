@@ -41,11 +41,10 @@ int main(gint argc, gchar **argv)
   g_main_loop_run(application->mainLoop);
 
   // 释放资源
+  g_assert_nonnull(application->mainLoop);
   g_main_loop_unref(application->mainLoop);
-
-  // g_main_loop_unref(application->mainLoop);
-  // g_main_context_unref(application->mainContext);
-  // g_free(application);
+  g_assert_nonnull(application->mainContext);
+  g_main_context_unref(application->mainContext);
 
   return 0;
 }
