@@ -196,7 +196,7 @@ void qp_flow_parse_cmdline(gint argc, gchar **argv)
 #endif
 
   GString *version = g_string_new(NULL);
-  g_string_printf(version, "- version: %d.%d.%d", QP_VERSION_MAJOR, QP_VERSION_MINOR, QP_VERSION_PATCH);
+  g_string_printf(version, "- version: %d.%d.%d build:" QP_RELEASE_DATE, QP_VERSION_MAJOR, QP_VERSION_MINOR, QP_VERSION_PATCH);
 
   context = g_option_context_new(version->str);
   g_option_context_add_main_entries(context, QP_OPTION_ENTIRES, NULL);
