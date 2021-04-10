@@ -55,8 +55,10 @@ typedef struct _QP_CMD_PARAM
   guint volume;
   guint card;
   guint card_sub;
+  guint src_port;
   GString *uri;
   GString *address;
+  GString* src_address;
   QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;

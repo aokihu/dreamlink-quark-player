@@ -20,7 +20,7 @@
 
 // 命令行解析回掉方法
 
-gboolean qp_boot_cmdopt_check(
+static gboolean qp_boot_cmdopt_check(
     const gchar *option_name,
     const gchar *value,
     gpointer data,

@@ -42,8 +42,9 @@ typedef struct _QP_Player
   GString *opt_uri;
   guint opt_port;
   GString *opt_address;
-  guint card;
-  guint card_sub;
+  guint opt_card;
+  guint opt_card_sub;
+  guint opt_volume;
   QP_SET_QUALITY opt_quality;
   QP_SET_INPUT_TYPE opt_input;
   QP_SET_OUTPUT_TYPE opt_output;

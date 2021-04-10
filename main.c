@@ -31,10 +31,9 @@ int main(gint argc, gchar **argv)
   application->mainContext = g_main_loop_get_context(application->mainLoop);
 
   // Boot
-  g_print("Boot...\n");
   qp_boot(argc, argv, application);
 
-  // 播放
+  // 启动播放器
   qp_player_play(application->player);
 
   // 主循环运行

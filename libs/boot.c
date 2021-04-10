@@ -1,30 +1,36 @@
 #include "boot.h"
 #include "version.h"
 
-//
-// 定义静态变量用于解析命令行参数
-//
-
+/* 定义静态变量用于解析命令行参数 */
 static GString *qp_cmdopt_uri;
 static GString *qp_cmdopt_address;
 static guint qp_cmdopt_port;
-static guint qp_cmdopt_card = 0;
-static guint qp_cmdopt_card_sub = 0;
-static guint qp_cmdopt_volume = 60;
+static guint qp_cmdopt_src_port;       // 输入源是UDP模式时，输入的UDP端口号
+static GString *qp_cmdopt_src_address; // 输入源是UDO模式时，驶入的UDP地址
+static guint qp_cmdopt_card = 0;       // 输出是local模式时的声卡编号
+static guint qp_cmdopt_card_sub = 0;   // 输出是local模式时声卡子设备编号
+static guint qp_cmdopt_volume = 60;    // 启动时播放器的音量
 static gboolean qp_cmdopt_silent = FALSE;
 static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;
 static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET;
 static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;
 
 /**
+ * 检查输入参数
  * @private
+ * @param option_name 参数名称，前面有'--'或者'-'
+ * @param value 参数输入的值
+ * @param data 
+ * @param error 返回错误信息的数据对象
  */
-gboolean qp_boot_cmdopt_check(
+static gboolean qp_boot_cmdopt_check(
     const gchar *option_name,
     const gchar *value,
     gpointer data,
     GError *error)
 {
+
+  /*----- 通用参数配置 -----*/
 
   // 检查<silent>参数
   if (!g_ascii_strcasecmp("--silent", option_name) || !g_ascii_strcasecmp("-s", option_name))
@@ -40,33 +46,6 @@ gboolean qp_boot_cmdopt_check(
     return TRUE;
   }
 
-  // 检查<address>参数
-  if (!g_ascii_strcasecmp("--address", option_name))
-  {
-    qp_cmdopt_address = g_string_new(value);
-    return TRUE;
-  }
-
-  // 检查<input>参数
-  if (!g_ascii_strcasecmp("--input", option_name) || !g_ascii_strcasecmp("-i", option_name))
-  {
-    if (!g_ascii_strcasecmp("udp", value))
-    {
-      qp_cmdopt_input = QP_SET_INPUT_TYPE_UDP;
-      return TRUE;
-    }
-  }
-
-  // 检查<output>参数
-  if (!g_ascii_strcasecmp("--output", option_name) || !g_ascii_strcasecmp("-o", option_name))
-  {
-    if (!g_ascii_strcasecmp("local", value))
-    {
-      qp_cmdopt_output = QP_SET_OUTPUT_TYPE_LOCAL;
-      return TRUE;
-    }
-  }
-
   // 检查<quality>参数
   if (!g_ascii_strcasecmp("--quality", option_name) || !g_ascii_strcasecmp("-q", option_name))
   {
@@ -80,6 +59,44 @@ gboolean qp_boot_cmdopt_check(
       qp_cmdopt_quality = QP_SET_QUALITY_HIGH;
       return TRUE;
     }
+  }
+
+  /*----- 输出组参数配置 -----*/
+
+  // 检查<output>参数
+  if (!g_ascii_strcasecmp("--output", option_name) || !g_ascii_strcasecmp("-o", option_name))
+  {
+    if (!g_ascii_strcasecmp("local", value))
+    {
+      qp_cmdopt_output = QP_SET_OUTPUT_TYPE_LOCAL;
+      return TRUE;
+    }
+  }
+
+  // 检查<output-address>参数
+  if (!g_ascii_strcasecmp("--output-address", option_name))
+  {
+    qp_cmdopt_address = g_string_new(value);
+    return TRUE;
+  }
+
+  /*----- 输入组参数配置 -----*/
+
+  // 检查<input>参数
+  if (!g_ascii_strcasecmp("--input", option_name) || !g_ascii_strcasecmp("-i", option_name))
+  {
+    if (!g_ascii_strcasecmp("udp", value))
+    {
+      qp_cmdopt_input = QP_SET_INPUT_TYPE_UDP;
+      return TRUE;
+    }
+  }
+
+  // 检查<src-address>参数
+  if (!g_ascii_strcasecmp("--input-address", option_name))
+  {
+    qp_cmdopt_src_address = g_string_new(value);
+    return TRUE;
   }
 
   return TRUE;
@@ -107,13 +124,15 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         "Media resource uri",
         "[uri://...]",
     },
-    {"input",
-     'o',
-     G_OPTION_FLAG_NONE,
-     G_OPTION_ARG_CALLBACK,
-     (GOptionArgFunc *)qp_boot_cmdopt_check,
-     "Choose input mode, default is [uri]",
-     "'uri'|'fd'"},
+    {
+        "input",
+        'i',
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)qp_boot_cmdopt_check,
+        "Select input mode, default is [uri]",
+        "['uri'|'udp']",
+    },
     {
         "output",
         'o',
@@ -121,7 +140,7 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
         "Choose output mode, default is [net]",
-        "'net'|'local'",
+        "['net'|'local']",
     },
     {
         "quality",
@@ -130,7 +149,7 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
         "Set output quality, when output type is [net]",
-        "'low'|'normal'|'high'",
+        "['low'|'normal'|'high']",
     },
     {
         "volume",
@@ -139,28 +158,56 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         G_OPTION_ARG_INT,
         &qp_cmdopt_volume,
         "Set volume",
-        "0~100",
+        "[0~100]",
     },
+    {NULL},
+};
+
+/* 输入源设置参数 */
+static GOptionEntry QP_OPTION_SRC_ENTIRES[] = {
     {
-        "port",
-        'p',
-        G_OPTION_FLAG_NONE,
-        G_OPTION_ARG_INT,
-        &qp_cmdopt_port,
-        "UDP broadcast port, when output type is [net]",
-        "[port number]",
-    },
-    {
-        "address",
-        'a',
+        "input-address",
+        0,
         G_OPTION_FLAG_NONE,
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
-        "UDP broadcast address, when output type is [net]",
-        "234.1.1.1",
+        "Set source address when input mode is 'udp', default is 127.0.0.1",
+        NULL,
     },
     {
-        "card",
+        "input-port",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &qp_cmdopt_src_port,
+        "Set source port when input mode is 'udp', default is 55100",
+        NULL,
+    },
+    {NULL},
+};
+
+/* 输出参数设置组 */
+static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
+    {
+        "output-address",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)qp_boot_cmdopt_check,
+        "Set UDP address when output mode is 'net', default is 234.1.1.1",
+        NULL,
+    },
+    {
+        "output-port",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_INT,
+        &qp_cmdopt_port,
+        "Set UDP port when output mode is 'net', default is  55100",
+        NULL,
+    },
+    {
+        "outout-card",
         0,
         G_OPTION_FLAG_NONE,
         G_OPTION_ARG_INT,
@@ -169,7 +216,7 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         "[card number]",
     },
     {
-        "card-sub",
+        "output-card-sub",
         0,
         G_OPTION_FLAG_NONE,
         G_OPTION_ARG_INT,
@@ -187,6 +234,10 @@ void qp_flow_parse_cmdline(gint argc, gchar **argv)
 {
   GError *error = NULL;
   GOptionContext *context;
+  GOptionGroup *src_group;
+  GOptionGroup *output_group;
+
+  /* 处理宽字符集 */
   gchar **args;
 
 #ifdef G_OS_WIN32
@@ -195,10 +246,31 @@ void qp_flow_parse_cmdline(gint argc, gchar **argv)
   args = g_strdupv(argv);
 #endif
 
+  /* 准备版本信息 */
   GString *version = g_string_new(NULL);
   g_string_printf(version, "- version: %d.%d.%d build:" QP_RELEASE_DATE, QP_VERSION_MAJOR, QP_VERSION_MINOR, QP_VERSION_PATCH);
 
   context = g_option_context_new(version->str);
+
+  /* 添加输入源组src_group */
+  src_group = g_option_group_new("src",
+                                 "Set the params of UDP source, when the input mode is 'udp'",
+                                 "Set the params of UDP source, when the input mode is 'udp'",
+                                 NULL,
+                                 NULL);
+  g_option_group_add_entries(src_group, QP_OPTION_SRC_ENTIRES);
+  g_option_context_add_group(context, src_group);
+
+  /* 添加输出组 outpu_group */
+  output_group = g_option_group_new("output",
+                                    "Set the params of UDP output, when the output mode is 'net'",
+                                    "Set the params of UDP output, when the output mode is 'net'",
+                                    NULL,
+                                    NULL);
+  g_option_group_add_entries(output_group, QP_OPTION_OUTPUT_ENTIRES);
+  g_option_context_add_group(context, output_group);
+
+  /* 添加主要帮助信息 */
   g_option_context_add_main_entries(context, QP_OPTION_ENTIRES, NULL);
   if (!g_option_context_parse(context, &argc, &args, &error))
   {
@@ -242,18 +314,22 @@ void qp_flow_print_env(QP_Application *application)
       g_string_append_printf(output_message,
                              "Output: local\n"
                              "Alsa Card: %d:%d",
-                             player->card, player->card_sub);
+                             player->opt_card, player->opt_card_sub);
       break;
     }
 
     GString *message = g_string_new("Quark Player\n");
     g_string_append_printf(message,
-                           "Version: %d.%d.%d\n"
-                           "URI: %s\n",
-                           QP_VERSION_MAJOR,
+                           "Version: %d.%d.%d\n", QP_VERSION_MAJOR,
                            QP_VERSION_MINOR,
-                           QP_VERSION_PATCH,
-                           player->opt_uri->str);
+                           QP_VERSION_PATCH);
+
+    if (player->opt_input == QP_SET_INPUT_TYPE_URI)
+    {
+      g_string_append_printf(message,
+                             "URI:%s\n",
+                             player->opt_uri->str);
+    }
 
     g_string_append(message, output_message->str);
 
@@ -289,9 +365,12 @@ void qp_flow_set_env(QP_Application *app)
 {
   QP_CmdParam *params = g_new(QP_CmdParam, 1);
 
+  /* 设置参数 */
   params->uri = qp_cmdopt_uri;
   params->address = qp_cmdopt_address != NULL ? qp_cmdopt_address : g_string_new("234.1.1.1");
   params->port = qp_cmdopt_port;
+  params->src_address = qp_cmdopt_src_address != NULL ? qp_cmdopt_src_address : g_string_new("127.0.0.1");
+  params->src_port = qp_cmdopt_src_port;
   params->input = qp_cmdopt_input;
   params->output = qp_cmdopt_output;
   params->quality = qp_cmdopt_quality;
@@ -317,7 +396,7 @@ extern void qp_boot(gint argc, gchar **argv, QP_Application *app)
 {
   qp_flow_parse_cmdline(argc, argv);
 
-  if (qp_cmdopt_uri == NULL)
+  if (qp_cmdopt_input == QP_SET_INPUT_TYPE_URI && qp_cmdopt_uri == NULL)
   {
     g_printerr("Please input uri. type 'qplayer -h' show more help\n");
     exit(1);

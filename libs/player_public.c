@@ -33,7 +33,13 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   player->status_playing = FALSE;
 
   // 设置URI
-  player->opt_uri = g_string_new(params->uri->str);
+  if (params->input == QP_SET_INPUT_TYPE_URI)
+  {
+    player->opt_uri = g_string_new(params->uri->str);
+  }
+
+  /* 设置音量 */
+  player->opt_volume = params->volume;
 
   // 设置输出质量
   player->opt_quality = params->quality;
@@ -51,8 +57,8 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
     player->opt_port = params->port;
     break;
   case QP_SET_OUTPUT_TYPE_LOCAL:
-    player->card = params->card;
-    player->card_sub = params->card_sub;
+    player->opt_card = params->card;
+    player->opt_card_sub = params->card_sub;
     break;
   }
 
