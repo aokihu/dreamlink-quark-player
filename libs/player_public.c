@@ -12,32 +12,6 @@
 #include "player.h"
 
 /**
- * 构造中间输出组件
- * @private
- * 
- * 构造Source和Sink之间的处理组件
- * 中间组件用来处理通用的音效处理
- * 
- * - volume 音量控制
- * - audioconvert 音乐转换
- * - audiorate 
- * 
- */
-
-void qp_player_construct_middle_component(QP_Player *player)
-{
-  // GstElement *volume = gst_element_factory_make("volume", QP_PLAYER_ELEMENT_VOLUME);
-}
-
-/**
- * 构造音乐播放器组件
- * @private
- */
-void qp_player_constrcut_components(QP_Player *player)
-{
-}
-
-/**
  * 创建新播放器对象
  * @public
  * @return QP_Player* 播放器对象指针
@@ -83,7 +57,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   }
 
   // 构造各个组件
-  qp_player_constrcut_components(player);
+  qp_player_make_pipeline(player);
 
   // 播放器出于准备状态
   player->status_ready = TRUE;
@@ -95,4 +69,26 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
  */
 extern void qp_player_play(QP_Player *player)
 {
+  if (player->status_ready)
+  {
+    gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
+    g_print("Playing...\n");
+  }
+}
+
+/**
+ * 设置音量
+ * @public
+ * @param volume 将要设置的音量，如果输入值超过了[0..100]的范围
+ *                将会自动设置为最接近的数值
+ */
+extern void qp_player_set_volume(QP_Player *player, gint64 volume)
+{
+  if (player->status_ready)
+  {
+    gdouble vol = volume / 100.0;
+    GstElement *obj_volume = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_VOLUME);
+    g_object_set(obj_volume, "volume", vol, NULL);
+    gst_object_unref(obj_volume);
+  }
 }

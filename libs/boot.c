@@ -84,6 +84,7 @@ gboolean qp_boot_cmdopt_check(
 
   return TRUE;
 }
+
 //
 // 定义命令行解析实体
 //

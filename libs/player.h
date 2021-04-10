@@ -15,10 +15,13 @@
 #include <glib.h>
 #include <gst/gst.h>
 
+#define QP_PLAYER_ELEMENT_PIPELINE "pipeline"
 #define QP_PLAYER_ELEMENT_SRC "src"
+#define QP_PLAYER_ELEMENT_SINK "sink"
 #define QP_PLAYER_ELEMENT_AUDIOCONVERT "audioconvert"
 #define QP_PLAYER_ELEMENT_AUDIORATE "audiorate"
 #define QP_PLAYER_ELEMENT_VOLUME "volume"
+#define QP_PLAYER_ELEMENT_RESAMPLE "resample"
 
 /**
  * 
@@ -52,15 +55,22 @@ typedef struct _QP_Player
 } QP_Player;
 
 //
+// 私有方法
+//
+void qp_player_make_pipeline(QP_Player *player);
+void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
+
+//
 // 公开方法
 //
 extern QP_Player *qp_player_new();
 extern void qp_player_init(QP_Player *, QP_CmdParam *);
 extern void qp_player_play(QP_Player *);
-extern void qp_player_stop();
-extern void qp_player_pause();
-extern void qp_player_resume();
-extern void qp_player_set_port(gint port);
-extern void qp_player_set_address(gchar *address);
+extern void qp_player_stop(QP_Player *);
+extern void qp_player_pause(QP_Player *);
+extern void qp_player_resume(QP_Player *);
+extern void qp_player_set_volume(QP_Player *player, gint64 volume);
+extern void qp_player_set_port(QP_Player *player, guint port);
+extern void qp_player_set_address(QP_Player *player, gchar *address);
 
 #endif

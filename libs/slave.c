@@ -5,7 +5,8 @@
 //
 
 static QP_SlaveCommandItem QP_SLAVE_COMMAND_LIST[] = {
-    {"quit", qp_slave_cb_quit},
+    {"quit", G_TYPE_NONE, qp_slave_cb_quit},
+    {"vol", G_TYPE_INT64, qp_slave_cb_set_volume},
     {NULL},
 };
 
@@ -23,41 +24,58 @@ void qp_slave_cb_quit(QP_SlaveCommand *cmd, gpointer data)
 }
 
 /**
+ * 处理设定音量的回掉方法
+ * @private
+ * @param cmd 解析后的命令数据包
+ * @param data 附加的数据，一般就是application
+ * @return void
+ */
+void qp_slave_cb_set_volume(QP_SlaveCommand *cmd, gpointer data)
+{
+  if (NULL != cmd->value)
+  {
+    QP_Application *app = (QP_Application *)data;
+    gint64 volume = g_ascii_strtoll(cmd->value, NULL, 10);
+    qp_player_set_volume(app->player, volume);
+  }
+}
+
+/**
  * 解析指令字符串
  * @private
  */
 void qp_slave_parse_command(GString *message, QP_Application *app)
 {
   gchar *_message = g_strstrip(message->str);
-  gchar **_command = g_strsplit_set(_message, ":", 16);
+  gchar **args = g_strsplit(_message, ":", -1);
+  gsize size_args = g_strv_length(args);
 
   QP_SlaveCommand *cmd = g_new(QP_SlaveCommand, 1);
+  guint idx = 0;
 
-  // 分析指令字符串
-  for (gint i = 0; i < sizeof(QP_SLAVE_COMMANDS); i++)
+  while (idx < 256)
   {
-    if (!g_strcmp0(_command[0], QP_SLAVE_COMMANDS[i]))
-    {
-      cmd->raw_command = _command[0];
-      cmd->command = i;
+    QP_SlaveCommandItem item = QP_SLAVE_COMMAND_LIST[idx];
+
+    // 遇到NULL集合就退出循环
+    if (item.cmd_name == NULL)
       break;
-    }
-  }
 
-  // 遍历指令处理集合
-  for (gint i = 0; TRUE; i++)
-  {
-    QP_SlaveCommandItem arg = QP_SLAVE_COMMAND_LIST[i];
-
-    if (arg.cmd_name != NULL)
+    // 匹配指令字符串
+    if (!g_ascii_strcasecmp(args[0], item.cmd_name))
     {
-      (arg.func)(cmd, app);
-      continue;
+      QP_SlaveFunc func = item.func;
+      cmd->raw_command = args[0];
+      cmd->value = size_args > 1 ? args[1] : NULL;
+
+      func(cmd, app);
     }
 
-    break;
+    // 序号自增
+    idx += 1;
   }
 
+  g_strfreev(args);
   g_free(cmd);
 }
 
