@@ -58,7 +58,7 @@ void qp_player_make_pipeline(QP_Player *player)
   /* 将中间组件连接 */
   if (!gst_element_link_many(obj_audioconvert, obj_volume, obj_resample, obj_sink, NULL))
   {
-    g_printerr("Element can not be linked\n");
+    g_debug("Element can not be linked\n");
     exit(-1);
   }
 
@@ -85,7 +85,7 @@ void qp_player_pad_added_handler(GstElement *src, GstPad *new_pad, gpointer data
   /* 检查Convert组件的Pad是否已经连接 */
   if (gst_pad_is_linked(sink_pad))
   {
-    g_print("We are already linked\n");
+    g_debug("We are already linked\n");
     goto exit;
   }
 
@@ -95,7 +95,7 @@ void qp_player_pad_added_handler(GstElement *src, GstPad *new_pad, gpointer data
   new_pad_type = gst_structure_get_name(new_pad_struct);
   if (!g_str_has_prefix(new_pad_type, "audio/x-raw"))
   {
-    g_print("Not raw audio. Ignoring.\n");
+    g_debug("Not raw audio. Ignoring.\n");
     goto exit;
   }
 
@@ -103,11 +103,11 @@ void qp_player_pad_added_handler(GstElement *src, GstPad *new_pad, gpointer data
   ret = gst_pad_link(new_pad, sink_pad);
   if (GST_PAD_LINK_FAILED(ret))
   {
-    g_print("Type is '%s' but link failed.\n", new_pad_type);
+    g_debug("Type is '%s' but link failed.\n", new_pad_type);
   }
   else
   {
-    g_print("Link successed(type '%s').\n", new_pad_type);
+    g_debug("Link successed(type '%s').\n", new_pad_type);
   }
 
 exit:

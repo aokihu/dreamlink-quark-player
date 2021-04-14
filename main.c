@@ -18,7 +18,7 @@ int main(gint argc, gchar **argv)
   gboolean gst_ok = gst_init_check(&argc, &argv, NULL);
   if (!gst_ok)
   {
-    g_printerr("Gstreamer is not OK\n");
+    g_debug("Gstreamer is not OK\n");
   }
 
   // 初始化全局应用对象

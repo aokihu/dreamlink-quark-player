@@ -291,10 +291,11 @@ void qp_flow_print_env(QP_Application *application)
 
   if (!player->status_ready)
   {
-    g_printerr("Player unready.\n");
+    g_warning("Player unready.\n");
     exit(1);
   }
 
+  /* 判断是否处于静默模式 */
   if (!qp_cmdopt_silent)
   {
 
@@ -313,17 +314,19 @@ void qp_flow_print_env(QP_Application *application)
     case QP_SET_OUTPUT_TYPE_LOCAL:
       g_string_append_printf(output_message,
                              "Output: local\n"
-                             "Alsa Card: %d:%d",
+                             "Alsa Card: %d:%d\n",
                              player->opt_card, player->opt_card_sub);
       break;
     }
 
+    /* 输出版本信息 */
     GString *message = g_string_new("Quark Player\n");
     g_string_append_printf(message,
                            "Version: %d.%d.%d\n", QP_VERSION_MAJOR,
                            QP_VERSION_MINOR,
                            QP_VERSION_PATCH);
 
+    /* 输出URI信息 */
     if (player->opt_input == QP_SET_INPUT_TYPE_URI)
     {
       g_string_append_printf(message,
@@ -333,7 +336,7 @@ void qp_flow_print_env(QP_Application *application)
 
     g_string_append(message, output_message->str);
 
-    // 设置输出质量
+    /* 设置输出质量 */
     GString *quality_message = g_string_new(NULL);
     switch (player->opt_quality)
     {
@@ -382,6 +385,9 @@ void qp_flow_set_env(QP_Application *app)
   QP_Player *player = app->player;
   qp_player_init(player, params);
 
+  /* 设置播放器初始音量 */
+  qp_player_set_volume(player, params->volume);
+
   // 释放资源
   g_string_free(params->uri, TRUE);
   g_string_free(params->address, TRUE);
@@ -398,7 +404,7 @@ extern void qp_boot(gint argc, gchar **argv, QP_Application *app)
 
   if (qp_cmdopt_input == QP_SET_INPUT_TYPE_URI && qp_cmdopt_uri == NULL)
   {
-    g_printerr("Please input uri. type 'qplayer -h' show more help\n");
+    g_print("Please input uri. type 'qplayer -h' show more help\n");
     exit(1);
   }
 

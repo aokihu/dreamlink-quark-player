@@ -94,7 +94,10 @@ extern void qp_player_set_volume(QP_Player *player, gint64 volume)
   {
     gdouble vol = volume / 100.0;
     GstElement *obj_volume = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_VOLUME);
+    g_printerr("volume:%d", volume);
     g_object_set(obj_volume, "volume", vol, NULL);
+
+    /* 释放资源 */
     gst_object_unref(obj_volume);
   }
 }
