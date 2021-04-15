@@ -9,7 +9,7 @@
 #ifndef QP_H_STD_MESSAGE
 #define QP_H_STD_MESSAGE
 
-#include <stdarg.h>
+#include "player.h"
 #include "error.h"
 
 /**
@@ -22,15 +22,15 @@
  * @数据 可变长度的数据
  * 
  */
-#define QP_STD_FMT_OUT(prefix, format, args...) g_printerr(prefix      \
-                                                           ":" format, \
+#define QP_STD_FMT_OUT(prefix, format, args...) g_printerr(prefix           \
+                                                           ":" format "\n", \
                                                            ##args)
 
 /**
  * 输出状态信息
  */
 extern void
-qp_std_statud_output();
+qp_std_status_output(QP_PLAYER_STATUS status);
 
 /** 
  * 输出错误消息
@@ -53,6 +53,14 @@ qp_std_tag_output(gchar *tag);
  * @param time 当前时间
  */
 extern void
-qp_std_time_output(guint64 total, guint time);
+qp_std_time_output(guint64 total, guint64 time);
+
+/**
+ * 输出播放器信息
+ * @param 信息名
+ * @param 信息值
+ */
+extern void
+qp_std_info_output(gchar *name, gchar *value);
 
 #endif

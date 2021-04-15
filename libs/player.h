@@ -41,7 +41,6 @@ typedef struct _QP_Player
 {
   // 状态定义
   gboolean status_ready;
-  gboolean status_playing;
   QP_PLAYER_STATUS status;
 
   // 参数定义

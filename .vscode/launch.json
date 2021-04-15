@@ -10,10 +10,8 @@
       "request": "launch",
       "program": "${fileDirname}/qplayer",
       "args": [
-        // "--uri",
-        // "http://www.mp3"
-        "--input",
-        "udp"
+        "--uri",
+        "file:///Users/aokihu/Projects/Dreamlink/test.mp3"
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

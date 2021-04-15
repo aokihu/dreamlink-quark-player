@@ -10,6 +10,7 @@
  */
 
 #include "player.h"
+#include "stdmessage.h"
 
 /**
  * 创建新播放器对象
@@ -30,7 +31,7 @@ QP_Player *qp_player_new()
  */
 void qp_player_init(QP_Player *player, QP_CmdParam *params)
 {
-  // player->status_playing = FALSE;
+  player->status_ready = FALSE;
   player->status = QP_PLAYER_STATUS_NOT_READY;
 
   // 设置URI
@@ -67,7 +68,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   qp_player_make_pipeline(player);
 
   // 播放器出于准备状态
-  // player->status_ready = TRUE;
+  player->status_ready = TRUE;
   player->status = QP_PLAYER_STATUS_READY;
 }
 
@@ -80,7 +81,7 @@ extern void qp_player_play(QP_Player *player)
   if (QP_PLAYER_IS_READY(player))
   {
     gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
-    g_print("Playing...\n");
+    qp_std_status_output(QP_PLAYER_STATUS_PLAYING);
   }
 }
 
@@ -96,10 +97,12 @@ extern void qp_player_set_volume(QP_Player *player, gint64 volume)
   {
     gdouble vol = volume / 100.0;
     GstElement *obj_volume = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_VOLUME);
-    g_printerr("volume:%lld", volume);
     g_object_set(obj_volume, "volume", vol, NULL);
+    gchar *volStr = g_strdup_printf("%lld", volume);
+    qp_std_info_output("volume", volStr);
 
     /* 释放资源 */
+    g_free(volStr);
     gst_object_unref(obj_volume);
   }
 }

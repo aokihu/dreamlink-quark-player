@@ -36,6 +36,7 @@ gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userda
     /* 播放停止消息 */
   case GST_MESSAGE_EOS:
   {
+    qp_std_status_output(QP_PLAYER_STATUS_EOS);
     break;
   }
   case GST_MESSAGE_ERROR:
