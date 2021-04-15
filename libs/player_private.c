@@ -69,7 +69,7 @@ void qp_player_make_pipeline(QP_Player *player)
 /**
  * Pad添加后的回掉方法
  * @private
- * @param src 触发组件的元件兑现
+ * @param src 触发组件的源对象
  * @param pad 增加的pad
  * @param data 附带数据，这里是QP_Player
  */
