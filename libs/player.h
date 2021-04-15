@@ -60,6 +60,7 @@ typedef struct _QP_Player
 //
 void qp_player_make_pipeline(QP_Player *player);
 void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
+void qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
 
 //
 // 公开方法
