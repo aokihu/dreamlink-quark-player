@@ -62,6 +62,11 @@ void qp_player_make_pipeline(QP_Player *player)
     exit(-1);
   }
 
+  /* 设置消息总线监听 */
+  GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(obj_pipeline));
+  gst_bus_add_watch(bus, qp_player_bus_handler, player);
+  gst_object_unref(bus);
+
   /* 当输入源是URI资源的时候监听PAD完成事件 */
   g_signal_connect(obj_src, "pad-added", G_CALLBACK(qp_player_pad_added_handler), obj_audioconvert);
 }
