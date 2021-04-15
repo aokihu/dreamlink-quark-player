@@ -11,6 +11,7 @@
 #ifndef QP_H_PLAYER
 #define QP_H_PLAYER
 
+#include "player_status.h"
 #include "setting.h"
 #include <glib.h>
 #include <gst/gst.h>
@@ -22,6 +23,10 @@
 #define QP_PLAYER_ELEMENT_AUDIORATE "audiorate"
 #define QP_PLAYER_ELEMENT_VOLUME "volume"
 #define QP_PLAYER_ELEMENT_RESAMPLE "resample"
+
+/* 宏方法定义 */
+
+#define QP_PLAYER_IS_READY(OBJ) (OBJ->status == QP_PLAYER_STATUS_READY)
 
 /**
  * 
@@ -37,6 +42,7 @@ typedef struct _QP_Player
   // 状态定义
   gboolean status_ready;
   gboolean status_playing;
+  QP_PLAYER_STATUS status;
 
   // 参数定义
   GString *opt_uri;
@@ -60,7 +66,8 @@ typedef struct _QP_Player
 //
 void qp_player_make_pipeline(QP_Player *player);
 void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
-void qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
+gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
+void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
 
 //
 // 公开方法

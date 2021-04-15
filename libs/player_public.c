@@ -30,7 +30,8 @@ QP_Player *qp_player_new()
  */
 void qp_player_init(QP_Player *player, QP_CmdParam *params)
 {
-  player->status_playing = FALSE;
+  // player->status_playing = FALSE;
+  player->status = QP_PLAYER_STATUS_NOT_READY;
 
   // 设置URI
   if (params->input == QP_SET_INPUT_TYPE_URI)
@@ -66,7 +67,8 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   qp_player_make_pipeline(player);
 
   // 播放器出于准备状态
-  player->status_ready = TRUE;
+  // player->status_ready = TRUE;
+  player->status = QP_PLAYER_STATUS_READY;
 }
 
 /**
@@ -75,7 +77,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
  */
 extern void qp_player_play(QP_Player *player)
 {
-  if (player->status_ready)
+  if (QP_PLAYER_IS_READY(player))
   {
     gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
     g_print("Playing...\n");
@@ -90,11 +92,11 @@ extern void qp_player_play(QP_Player *player)
  */
 extern void qp_player_set_volume(QP_Player *player, gint64 volume)
 {
-  if (player->status_ready)
+  if (QP_PLAYER_IS_READY(player))
   {
     gdouble vol = volume / 100.0;
     GstElement *obj_volume = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_VOLUME);
-    g_printerr("volume:%d", volume);
+    g_printerr("volume:%lld", volume);
     g_object_set(obj_volume, "volume", vol, NULL);
 
     /* 释放资源 */
