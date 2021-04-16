@@ -11,7 +11,11 @@
       "program": "${fileDirname}/qplayer",
       "args": [
         "--uri",
-        "file:///Users/aokihu/Projects/Dreamlink/test.mp3"
+        "file:///Users/aokihu/Projects/Dreamlink/test.mp3",
+        "--output-address",
+        "127.0.0.1",
+        "--ouput-port",
+        "20000"
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

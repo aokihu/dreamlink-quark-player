@@ -23,6 +23,10 @@
 #define QP_PLAYER_ELEMENT_AUDIORATE "audiorate"
 #define QP_PLAYER_ELEMENT_VOLUME "volume"
 #define QP_PLAYER_ELEMENT_RESAMPLE "resample"
+#define QP_PLAYER_ELEMENT_UDPSINK "udpsink"
+#define QP_PLAYER_ELEMENT_OUPSENCODE "opusencode"
+#define QP_PLAYER_ELEMENT_RTPOPUSPAY "rtpopuspay"
+#define QP_PLAYER_ELEMENT_RTPSINKBIN "rtpsinkbin"
 
 /* 宏方法定义 */
 
@@ -67,6 +71,7 @@ typedef struct _QP_Player
 // 私有方法
 //
 void qp_player_make_pipeline(QP_Player *player);
+GstElement *qp_player_make_rtp_bin(QP_Player *player);
 void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
 gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);

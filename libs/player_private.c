@@ -47,7 +47,11 @@ void qp_player_make_pipeline(QP_Player *player)
 
   if (player->opt_output == QP_SET_OUTPUT_TYPE_NET)
   {
-    obj_sink = gst_element_factory_make("udpsink", QP_PLAYER_ELEMENT_SINK);
+    // obj_sink = gst_element_factory_make("udpsink", QP_PLAYER_ELEMENT_SINK);
+    // g_object_set(obj_sink, "host", player->opt_address->str,
+    //              "port", player->opt_port,
+    //              NULL);
+    obj_sink = qp_player_make_rtp_bin(player);
   }
 
   /* 将所有的元件组合起来 */
