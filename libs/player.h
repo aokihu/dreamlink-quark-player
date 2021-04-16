@@ -26,7 +26,7 @@
 
 /* 宏方法定义 */
 
-#define QP_PLAYER_IS_READY(OBJ) (OBJ->status == QP_PLAYER_STATUS_READY)
+#define QP_PLAYER_IS_OK(OBJ) (OBJ->status != QP_PLAYER_STATUS_NOT_READY)
 
 /**
  * 

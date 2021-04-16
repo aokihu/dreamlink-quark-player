@@ -80,13 +80,10 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
  */
 extern void qp_player_play(QP_Player *player)
 {
-  if (QP_PLAYER_IS_READY(player))
+  if (QP_PLAYER_IS_OK(player))
   {
     gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
     qp_std_status_output(QP_PLAYER_STATUS_PLAYING);
-
-    /* 设置定时监听器,监视播放进度 */
-    // g_timeout_add(1000, qp_player_position_handler, player);
   }
 }
 
@@ -98,7 +95,7 @@ extern void qp_player_play(QP_Player *player)
  */
 extern void qp_player_set_volume(QP_Player *player, gint64 volume)
 {
-  if (QP_PLAYER_IS_READY(player))
+  if (QP_PLAYER_IS_OK(player))
   {
     gdouble vol = volume / 100.0;
     GstElement *obj_volume = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_VOLUME);

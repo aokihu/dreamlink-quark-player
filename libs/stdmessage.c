@@ -11,7 +11,7 @@ qp_std_error_output(QP_ERROR_CODE code, const gchar *message)
 extern void
 qp_std_time_output(guint64 total, guint64 time)
 {
-  QP_STD_FMT_OUT("T", "%lld/%lld", total, time);
+  QP_STD_FMT_OUT("T", "%lld/%lld", GST_TIME_AS_MSECONDS(total), GST_TIME_AS_MSECONDS(time));
 }
 
 /**
