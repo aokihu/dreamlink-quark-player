@@ -31,8 +31,10 @@ QP_Player *qp_player_new()
  */
 void qp_player_init(QP_Player *player, QP_CmdParam *params)
 {
+  // 设置播放器初始化状态
   player->status_ready = FALSE;
   player->status = QP_PLAYER_STATUS_NOT_READY;
+  player->timer_flag = 0;
 
   // 设置URI
   if (params->input == QP_SET_INPUT_TYPE_URI)
@@ -82,6 +84,9 @@ extern void qp_player_play(QP_Player *player)
   {
     gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
     qp_std_status_output(QP_PLAYER_STATUS_PLAYING);
+
+    /* 设置定时监听器,监视播放进度 */
+    // g_timeout_add(1000, qp_player_position_handler, player);
   }
 }
 

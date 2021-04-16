@@ -14,7 +14,8 @@
     "version.h": "c",
     "application.h": "c",
     "slave.h": "c",
-    "stdmessage.h": "c"
+    "stdmessage.h": "c",
+    "setting.h": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }

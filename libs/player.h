@@ -43,6 +43,9 @@ typedef struct _QP_Player
   gboolean status_ready;
   QP_PLAYER_STATUS status;
 
+  // 定时器具柄
+  guint timer_flag;
+
   // 参数定义
   GString *opt_uri;
   guint opt_port;
@@ -67,6 +70,8 @@ void qp_player_make_pipeline(QP_Player *player);
 void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
 gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
+gboolean qp_player_position_handler(gpointer userdata);
+void qp_player_status_changed_handler(GstMessage *message, gpointer userdata);
 
 //
 // 公开方法
