@@ -20,9 +20,9 @@ gboolean qp_player_position_handler(gpointer userdata)
     return FALSE;
   }
 
-  if (gst_element_query_position(GST_ELEMENT(player->gst_pipeline), GST_FORMAT_TIME, &pos) && gst_element_query_duration(GST_ELEMENT(player->gst_pipeline), GST_FORMAT_TIME, &len))
+  if (gst_element_query_position(GST_ELEMENT(player->gst_pipeline), GST_FORMAT_TIME, &pos))
   {
-    qp_std_time_output(len, pos);
+    qp_std_current_time_output(pos);
   }
   return TRUE;
 }
@@ -59,6 +59,7 @@ void qp_player_status_changed_handler(GstMessage *message, gpointer userdata)
   GstState oldState;
   GstState newState;
   GstState pending;
+  gint64 totalDuration = 0;
 
   QP_Player *player = (QP_Player *)userdata;
   gst_message_parse_state_changed(message, &oldState, &newState, &pending);
@@ -68,7 +69,16 @@ void qp_player_status_changed_handler(GstMessage *message, gpointer userdata)
     // PAUSED => PLAYING
     if (oldState == GST_STATE_PAUSED && newState == GST_STATE_PLAYING)
     {
+      /* 设定一个定时器监听播放进度 */
       player->timer_flag = g_timeout_add(300, qp_player_position_handler, player);
+
+      /* 增加输出媒体总时间 */
+      if (gst_element_query_duration(GST_ELEMENT(player->gst_pipeline), GST_FORMAT_TIME, &totalDuration))
+      {
+        qp_std_total_time_output(totalDuration);
+      }
+
+      /* 设置播放器状态: 正在播放 */
       player->status = QP_PLAYER_STATUS_PLAYING;
     }
   }

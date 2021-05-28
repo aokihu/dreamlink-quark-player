@@ -48,12 +48,18 @@ extern void
 qp_std_tag_output(gchar *tag);
 
 /**
- * 输出事件信息
- * @param total 总时间
- * @param time 当前时间
+ * 输出当前播放进度时间
+ * @param time 当前播放进度时间
  */
 extern void
-qp_std_time_output(guint64 total, guint64 time);
+qp_std_current_time_output(guint64 time);
+
+/**
+ * 输出当前媒体文件总播放时间
+ * @param time 媒体总播放时间
+ */
+extern void
+qp_std_total_time_output(guint64 time);
 
 /**
  * 输出播放器信息

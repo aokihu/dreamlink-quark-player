@@ -7,11 +7,18 @@ qp_std_error_output(QP_ERROR_CODE code, const gchar *message)
   QP_STD_FMT_OUT("E", "%d:%s", code, message);
 }
 
-/* 输出时间信息 */
+/* 输出媒体当前播放时间 */
 extern void
-qp_std_time_output(guint64 total, guint64 time)
+qp_std_current_time_output(guint64 time)
 {
-  QP_STD_FMT_OUT("T", "%lld/%lld", GST_TIME_AS_MSECONDS(total), GST_TIME_AS_MSECONDS(time));
+  QP_STD_FMT_OUT("C", "%lld", GST_TIME_AS_MSECONDS(time));
+}
+
+/* 输出媒体总播放时间 */
+extern void
+qp_std_total_time_output(guint64 time)
+{
+  QP_STD_FMT_OUT("T", "%lld", GST_TIME_AS_MSECONDS(time));
 }
 
 /**
