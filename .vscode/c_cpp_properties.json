@@ -15,7 +15,7 @@
       "compilerPath": "/usr/bin/gcc",
       "cStandard": "c11",
       "cppStandard": "c++98",
-      "intelliSenseMode": "macos-gcc-x64",
+      "intelliSenseMode": "macos-clang-x64",
       "compilerArgs": []
     }
   ],

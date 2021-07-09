@@ -24,6 +24,10 @@
 #define QP_PLAYER_ELEMENT_VOLUME "volume"
 #define QP_PLAYER_ELEMENT_RESAMPLE "resample"
 #define QP_PLAYER_ELEMENT_UDPSINK "udpsink"
+#define QP_PLAYER_ELEMENT_UDPSINK6 "udpsink6"
+#define QP_PLAYER_ELEMENT_TEE "tee"
+#define QP_PLYAER_ELEMENT_QUEUE "queue"
+#define QP_PLAYER_ELEMENT_QUEUE6 "queue6"
 #define QP_PLAYER_ELEMENT_OUPSENCODE "opusencode"
 #define QP_PLAYER_ELEMENT_RTPOPUSPAY "rtpopuspay"
 #define QP_PLAYER_ELEMENT_RTPSINKBIN "rtpsinkbin"
@@ -53,7 +57,8 @@ typedef struct _QP_Player
   // 参数定义
   GString *opt_uri;
   guint opt_port;
-  GString *opt_address;
+  GString *opt_address;  // IPv4输出地址
+  GString *opt_address6; // IPv6输出地址
   guint opt_card;
   guint opt_card_sub;
   guint opt_volume;
@@ -89,6 +94,7 @@ extern void qp_player_pause(QP_Player *);
 extern void qp_player_resume(QP_Player *);
 extern void qp_player_set_volume(QP_Player *player, gint64 volume);
 extern void qp_player_set_port(QP_Player *player, guint port);
-extern void qp_player_set_address(QP_Player *player, gchar *address);
+extern void qp_player_set_address(QP_Player *player, const gchar *address);
+extern void qp_player_set_address6(QP_Player *player, const gchar *address);
 
 #endif

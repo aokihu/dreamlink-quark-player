@@ -4,6 +4,7 @@
 /* 定义静态变量用于解析命令行参数 */
 static GString *qp_cmdopt_uri;
 static GString *qp_cmdopt_address;
+static GString *qp_cmdopt_address6;
 static guint qp_cmdopt_port;
 static guint qp_cmdopt_src_port;       // 输入源是UDP模式时，输入的UDP端口号
 static GString *qp_cmdopt_src_address; // 输入源是UDO模式时，驶入的UDP地址
@@ -77,6 +78,12 @@ static gboolean qp_boot_cmdopt_check(
   if (!g_ascii_strcasecmp("--output-address", option_name))
   {
     qp_cmdopt_address = g_string_new(value);
+    return TRUE;
+  }
+  // 检查<output-address6>参数
+  if (!g_ascii_strcasecmp("--output-address6", option_name))
+  {
+    qp_cmdopt_address6 = g_string_new(value);
     return TRUE;
   }
 
@@ -198,6 +205,15 @@ static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
         NULL,
     },
     {
+        "output-address6",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)qp_boot_cmdopt_check,
+        "Set UDP address for IPv6 when output mode is 'net', default is FF15::D:EA",
+        NULL,
+    },
+    {
         "output-port",
         0,
         G_OPTION_FLAG_NONE,
@@ -306,9 +322,11 @@ void qp_flow_print_env(QP_Application *application)
     case QP_SET_OUTPUT_TYPE_NET:
       g_string_append_printf(output_message,
                              "Output: net\n"
-                             "Address: %s\n"
+                             "IPv4 output address: %s\n"
+                             "IPv6 output address: %s\n"
                              "Port: %d\n",
                              player->opt_address->str,
+                             player->opt_address6->str,
                              player->opt_port);
       break;
     case QP_SET_OUTPUT_TYPE_LOCAL:
@@ -371,6 +389,7 @@ void qp_flow_set_env(QP_Application *app)
   /* 设置参数 */
   params->uri = qp_cmdopt_uri;
   params->address = qp_cmdopt_address != NULL ? qp_cmdopt_address : g_string_new("234.1.1.1");
+  params->address6 = qp_cmdopt_address6 != NULL ? qp_cmdopt_address6 : g_string_new("FF15::D:EA");
   params->port = qp_cmdopt_port;
   params->src_address = qp_cmdopt_src_address != NULL ? qp_cmdopt_src_address : g_string_new("127.0.0.1");
   params->src_port = qp_cmdopt_src_port;

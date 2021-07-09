@@ -58,7 +58,8 @@ typedef struct _QP_CMD_PARAM
   guint src_port;
   GString *uri;
   GString *address;
-  GString* src_address;
+  GString *address6;
+  GString *src_address;
   QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;

@@ -58,6 +58,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   {
   case QP_SET_OUTPUT_TYPE_NET:
     player->opt_address = g_string_new(params->address->str);
+    player->opt_address6 = g_string_new(params->address6->str);
     player->opt_port = params->port;
     break;
   case QP_SET_OUTPUT_TYPE_LOCAL:
