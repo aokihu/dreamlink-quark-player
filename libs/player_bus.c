@@ -4,9 +4,9 @@
  * @copyright Reasonbox
  */
 
-#include "player.h"
-#include "stdmessage.h"
-#include "error.h"
+#include "../headers/player.h"
+#include "../headers/stdmessage.h"
+#include "../headers/error.h"
 
 /* 获取显示播放时间 */
 gboolean qp_player_position_handler(gpointer userdata)

@@ -4,7 +4,7 @@
  * @copyright Reasonbox
  */
 
-#include "player.h"
+#include "../headers/player.h"
 
 void qp_player_rtpbin_pad_added_handler(GstElement *src, GstPad *pad, gpointer *data)
 {

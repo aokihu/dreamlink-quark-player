@@ -9,8 +9,8 @@
  *
  */
 
-#include "player.h"
-#include "stdmessage.h"
+#include "../headers/player.h"
+#include "../headers/stdmessage.h"
 
 /**
  * 创建新播放器对象

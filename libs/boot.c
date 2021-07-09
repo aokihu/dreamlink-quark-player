@@ -1,5 +1,5 @@
-#include "boot.h"
-#include "version.h"
+#include "../headers/boot.h"
+#include "../headers/version.h"
 
 /* 定义静态变量用于解析命令行参数 */
 static GString *qp_cmdopt_uri;

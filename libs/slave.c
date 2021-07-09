@@ -1,4 +1,4 @@
-#include "slave.h"
+#include "../headers/slave.h"
 
 //
 // 全局静态变量定义
