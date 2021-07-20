@@ -95,6 +95,6 @@ GstElement *qp_player_make_rtp_bin(QP_Player *player)
   gst_object_unref(rtpbinSinkPad);
   gst_object_unref(rtpbin6SinkPad);
 
-  gst_debug_bin_to_dot_file(bin, GST_DEBUG_GRAPH_SHOW_ALL, "kankan");
+  // gst_debug_bin_to_dot_file(bin, GST_DEBUG_GRAPH_SHOW_ALL, "kankan");
   return bin;
 }

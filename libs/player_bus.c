@@ -12,7 +12,7 @@
 gboolean qp_player_position_handler(gpointer userdata)
 {
   QP_Player *player = (QP_Player *)userdata;
-  gint64 pos, len;
+  gint64 pos;
 
   /* 当播放器处于非播放状态的时候，取消定时器监听 */
   if (player->status != QP_PLAYER_STATUS_PLAYING)
