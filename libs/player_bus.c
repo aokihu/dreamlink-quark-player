@@ -52,8 +52,8 @@ void qp_player_error_handler(GstMessage *message, gpointer userdata)
       {
         /* 移除IPv6广播资源 */
         g_signal_emit_by_name(message->src, "remove", player->opt_address6->str, player->opt_port);
-        gst_element_set_state(GST_PIPELINE_CAST(player->gst_pipeline), GST_STATE_PLAYING);
-        g_print("OK\n");
+        gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_NULL);
+        gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
       }
       break;
     }
