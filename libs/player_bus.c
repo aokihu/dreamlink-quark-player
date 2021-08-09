@@ -30,6 +30,7 @@ gboolean qp_player_position_handler(gpointer userdata)
 /* 处理Bus总线错误 */
 void qp_player_error_handler(GstMessage *message, gpointer userdata)
 {
+  QP_Player *player = (QP_Player *)userdata;
   GError *error;
   gchar *debug;
   gst_message_parse_error(message, &error, &debug);
@@ -43,6 +44,19 @@ void qp_player_error_handler(GstMessage *message, gpointer userdata)
     case GST_RESOURCE_ERROR_NOT_FOUND:
       qp_std_error_output(QP_ERROR_RESOURCE_NOT_FOUND, "resource not found");
       break;
+    case GST_RESOURCE_ERROR_SETTINGS:
+    {
+
+      /* 如果是udpsink发出的错误，多半就是无法加入到IPv6广播 */
+      if (!g_ascii_strcasecmp(message->src->name, QP_PLAYER_ELEMENT_UDPSINK))
+      {
+        /* 移除IPv6广播资源 */
+        g_signal_emit_by_name(message->src, "remove", player->opt_address6->str, player->opt_port);
+        gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_NULL);
+        gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
+      }
+      break;
+    }
     }
   }
 
@@ -102,7 +116,7 @@ gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userda
   case GST_MESSAGE_ERROR:
   {
     qp_player_error_handler(message, userdata);
-    return FALSE;
+    // return FALSE;
     break;
   }
   /* 状态改变 */
