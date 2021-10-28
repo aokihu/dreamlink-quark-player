@@ -76,8 +76,12 @@ typedef struct _QP_Player
 // 私有方法
 //
 void qp_player_make_pipeline(QP_Player *player);
-GstElement *qp_player_make_rtp_bin(QP_Player *player);
-void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);
+GstElement *qp_player_make_rtp_bin(QP_Player *player);  // 创建rtp管道
+GstElement *qp_player_make_fd_bin(QP_Player *player);   // 创建fd管道
+
+void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);                // 动态增加pad回调方法
+void qp_player_decodebin_pad_added_handler(GstElement *decodebin, GstPad *pad, gpointer data);
+
 gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
 gboolean qp_player_position_handler(gpointer userdata);

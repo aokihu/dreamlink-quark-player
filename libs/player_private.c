@@ -32,6 +32,13 @@ void qp_player_make_pipeline(QP_Player *player)
     obj_src = gst_element_factory_make("udpsrc", QP_PLAYER_ELEMENT_SRC);
   }
 
+  /* 播放源是fd的情况 */
+  /* @since 1.5.1 */
+  if(player->opt_input == QP_SET_INPUT_TYPE_FD)
+  {
+    // TODO 需要创建一个bin，包含fdsrc和decodebin
+  }
+
   /* 输出源是ALSA设备的情况 */
 
   if (player->opt_output == QP_SET_OUTPUT_TYPE_LOCAL)
