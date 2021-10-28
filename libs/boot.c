@@ -5,16 +5,16 @@
 static GString *qp_cmdopt_uri;
 static GString *qp_cmdopt_address;
 static GString *qp_cmdopt_address6;
-static guint qp_cmdopt_port;
-static guint qp_cmdopt_src_port;       // 输入源是UDP模式时，输入的UDP端口号
-static GString *qp_cmdopt_src_address; // 输入源是UDO模式时，驶入的UDP地址
-static guint qp_cmdopt_card = 0;       // 输出是local模式时的声卡编号
-static guint qp_cmdopt_card_sub = 0;   // 输出是local模式时声卡子设备编号
-static guint qp_cmdopt_volume = 60;    // 启动时播放器的音量
-static gboolean qp_cmdopt_silent = FALSE;
-static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;
-static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET;
-static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;
+static guint qp_cmdopt_port;                                          // 端口号 
+static guint qp_cmdopt_src_port;                                      // 输入源是UDP模式时，输入的UDP端口号
+static GString *qp_cmdopt_src_address;                                // 输入源是UDP模式时，驶入的UDP地址
+static guint qp_cmdopt_card = 0;                                      // 输出是local模式时的声卡编号
+static guint qp_cmdopt_card_sub = 0;                                  // 输出是local模式时声卡子设备编号
+static guint qp_cmdopt_volume = 60;                                   // 启动时播放器的音量
+static gboolean qp_cmdopt_silent = FALSE;                             // 静默模式
+static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;     // 输入源类型
+static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET;  // 输出源类型
+static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;      // 音质质量
 
 /**
  * 检查输入参数

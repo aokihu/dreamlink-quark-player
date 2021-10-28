@@ -3,7 +3,7 @@
  * 
  * @author aokihu <aokihu@gmail.com>
  * @copyright Reasonbox
- * @version 1.1.0
+ * @version 1.1.1
  * @date Mon Apr  5 16:43:03 CST 2021
  * 
  */
@@ -50,21 +50,21 @@ typedef struct _QP_Player
   // 状态定义
   gboolean status_ready;
   QP_PLAYER_STATUS status;
+  guint timer_flag;               // 定时器句柄
 
-  // 定时器具柄
-  guint timer_flag;
-
+  //
   // 参数定义
-  GString *opt_uri;
-  guint opt_port;
-  GString *opt_address;  // IPv4输出地址
-  GString *opt_address6; // IPv6输出地址
-  guint opt_card;
-  guint opt_card_sub;
-  guint opt_volume;
-  QP_SET_QUALITY opt_quality;
-  QP_SET_INPUT_TYPE opt_input;
-  QP_SET_OUTPUT_TYPE opt_output;
+  //
+  GString *opt_uri;               // 播放资源uri地址
+  guint opt_port;                 // 广播端口
+  GString *opt_address;           // IPv4输出地址
+  GString *opt_address6;          // IPv6输出地址
+  guint opt_card;                 // 音频输出设备
+  guint opt_card_sub;             // 音频输出子设备
+  guint opt_volume;               // 音量
+  QP_SET_QUALITY opt_quality;     // 播放音质质量
+  QP_SET_INPUT_TYPE opt_input;    // 输入设备类型
+  QP_SET_OUTPUT_TYPE opt_output;  // 输出设备类型
 
   // GStreamer对象
   GstPipeline *gst_pipeline;
@@ -87,14 +87,14 @@ void qp_player_status_changed_handler(GstMessage *message, gpointer userdata);
 // 公开方法
 //
 extern QP_Player *qp_player_new();
-extern void qp_player_init(QP_Player *, QP_CmdParam *);
-extern void qp_player_play(QP_Player *);
-extern void qp_player_stop(QP_Player *);
-extern void qp_player_pause(QP_Player *);
-extern void qp_player_resume(QP_Player *);
-extern void qp_player_set_volume(QP_Player *player, gint64 volume);
-extern void qp_player_set_port(QP_Player *player, guint port);
-extern void qp_player_set_address(QP_Player *player, const gchar *address);
-extern void qp_player_set_address6(QP_Player *player, const gchar *address);
+extern void qp_player_init(QP_Player *, QP_CmdParam *);                       // 初始化播放器
+extern void qp_player_play(QP_Player *);                                      // 播放
+extern void qp_player_stop(QP_Player *);                                      // 停止
+extern void qp_player_pause(QP_Player *);                                     // 暂停
+extern void qp_player_resume(QP_Player *);                                    // 恢复
+extern void qp_player_set_volume(QP_Player *player, gint64 volume);           // 设置音量
+extern void qp_player_set_port(QP_Player *player, guint port);                // 设置端口
+extern void qp_player_set_address(QP_Player *player, const gchar *address);   // 设置IPv4广播地址
+extern void qp_player_set_address6(QP_Player *player, const gchar *address);  // 设置IPv6广播地址
 
 #endif

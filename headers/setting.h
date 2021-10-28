@@ -19,8 +19,9 @@
  */
 typedef enum _QP_SET_INPUT_TYPE
 {
-  QP_SET_INPUT_TYPE_URI, // 使用URI作为输入
-  QP_SET_INPUT_TYPE_UDP, // 使用fd文件描述符作为输入
+  QP_SET_INPUT_TYPE_URI,  // 使用URI作为输入
+  QP_SET_INPUT_TYPE_UDP,  // 使用udp socket作为输入
+  QP_SET_INPUT_TYPE_FD,   // 使用文件描述符作为输入
 } QP_SET_INPUT_TYPE;
 
 /**

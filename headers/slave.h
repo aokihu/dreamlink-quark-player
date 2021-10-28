@@ -56,8 +56,7 @@ typedef struct _QP_SLAVE_COMMAND
  * @data 附加的数据
  * 
  */
-typedef void (*QP_SlaveFunc)(QP_SlaveCommand *cmd,
-                             gpointer data);
+typedef void (*QP_SlaveFunc)(QP_SlaveCommand *cmd, gpointer data);
 
 /**
  * 控制指令解析结构体

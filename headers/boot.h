@@ -18,7 +18,7 @@
 #ifndef QP_H_FLOW
 #define QP_H_FLOW
 
-// 命令行解析回掉方法
+// 命令行解析回调方法
 
 static gboolean qp_boot_cmdopt_check(
     const gchar *option_name,
