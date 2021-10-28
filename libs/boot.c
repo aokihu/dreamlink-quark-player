@@ -97,6 +97,12 @@ static gboolean qp_boot_cmdopt_check(
       qp_cmdopt_input = QP_SET_INPUT_TYPE_UDP;
       return TRUE;
     }
+
+    if(!g_ascii_strcasecmp("fd", value))
+    {
+      qp_cmdopt_input = QP_SET_INPUT_TYPE_FD;
+      return TRUE;
+    }
   }
 
   // 检查<src-address>参数
@@ -138,7 +144,7 @@ static GOptionEntry QP_OPTION_ENTIRES[] = {
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
         "Select input mode, default is [uri]",
-        "['uri'|'udp']",
+        "['uri'|'udp'|'fd']",
     },
     {
         "output",
