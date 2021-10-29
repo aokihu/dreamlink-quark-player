@@ -71,7 +71,7 @@ void qp_player_make_pipeline(QP_Player *player)
 
   /* 解析命令字符串,生成管道对象 */
 
-  g_print("Launch string: %s\n", pipeline_string->str);
+  // g_print("Launch string: %s\n", pipeline_string->str);
 
   GstElement* obj_pipeline = gst_parse_launch(pipeline_string->str, NULL);
   player->gst_pipeline = GST_PIPELINE(obj_pipeline);
