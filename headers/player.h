@@ -36,6 +36,20 @@
 #define QP_PLAYER_IS_OK(OBJ) (OBJ->status != QP_PLAYER_STATUS_NOT_READY)
 
 /**
+ * Player播放器状态定义 (从player_status.h文件中合并而来)
+ */
+
+typedef enum _QP_PLAYER_STATUS
+{
+  QP_PLAYER_STATUS_NOT_READY,       // 播放器未准备好
+  QP_PLAYER_STATUS_READY,           // 播放器准备好
+  QP_PLAYER_STATUS_PLAYING,         // 播放器正在播放
+  QP_PLAYER_STATUS_EOS,             // 播放器播放结束
+  QP_PLAYER_STATUS_PAUSE,           // 播放器暂停
+  QP_PLAYER_STATUS_BUFFER_LOADING,  // 播放器缓冲中
+} QP_PLAYER_STATUS;
+
+/**
  * 
  * 播放器结构体定义
  * @struct QP_Player
@@ -70,20 +84,6 @@ typedef struct _QP_Player
   GstElement *gst_source_bin;
   GstElement *gst_sink_bin;
 } QP_Player;
-
-/**
- * Player播放器状态定义 (从player_status.h文件中合并而来)
- */
-
-typedef enum _QP_PLAYER_STATUS
-{
-  QP_PLAYER_STATUS_NOT_READY,       // 播放器未准备好
-  QP_PLAYER_STATUS_READY,           // 播放器准备好
-  QP_PLAYER_STATUS_PLAYING,         // 播放器正在播放
-  QP_PLAYER_STATUS_EOS,             // 播放器播放结束
-  QP_PLAYER_STATUS_PAUSE,           // 播放器暂停
-  QP_PLAYER_STATUS_BUFFER_LOADING,  // 播放器缓冲中
-} QP_PLAYER_STATUS;
 
 //
 // 私有方法

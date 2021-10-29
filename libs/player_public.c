@@ -83,6 +83,18 @@ extern void qp_player_play(QP_Player *player)
 {
   if (QP_PLAYER_IS_OK(player))
   {
+
+    //
+    // 如果是UDP输出，设置广播端口和地址
+    //
+
+    if(player->opt_output == QP_SET_OUTPUT_TYPE_NET) {
+      GstElement* sink = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_UDPSINK);
+      g_signal_emit_by_name(sink, "add", player->opt_address->str, player->opt_port);
+      g_signal_emit_by_name(sink, "add", player->opt_address6->str, player->opt_port);
+      gst_object_unref(sink);
+    }
+
     gst_element_set_state(GST_ELEMENT(player->gst_pipeline), GST_STATE_PLAYING);
     qp_std_status_output(QP_PLAYER_STATUS_PLAYING);
   }

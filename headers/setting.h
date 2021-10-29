@@ -64,7 +64,6 @@ typedef struct _QP_CMD_PARAM
   QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;
-
 } QP_CmdParam;
 
 #endif

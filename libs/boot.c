@@ -283,7 +283,7 @@ void qp_flow_parse_cmdline(gint argc, gchar **argv)
   g_option_group_add_entries(src_group, QP_OPTION_SRC_ENTIRES);
   g_option_context_add_group(context, src_group);
 
-  /* 添加输出组 outpu_group */
+  /* 添加输出组 output_group */
   output_group = g_option_group_new("output",
                                     "Set the params of UDP output, when the output mode is 'net'",
                                     "Set the params of UDP output, when the output mode is 'net'",
@@ -394,10 +394,10 @@ void qp_flow_set_env(QP_Application *app)
 
   /* 设置参数 */
   params->uri = qp_cmdopt_uri;
+  params->src_address = qp_cmdopt_src_address != NULL ? qp_cmdopt_src_address : g_string_new("127.0.0.1");
   params->address = qp_cmdopt_address != NULL ? qp_cmdopt_address : g_string_new("234.1.1.1");
   params->address6 = qp_cmdopt_address6 != NULL ? qp_cmdopt_address6 : g_string_new("FF15::D:EA");
   params->port = qp_cmdopt_port;
-  params->src_address = qp_cmdopt_src_address != NULL ? qp_cmdopt_src_address : g_string_new("127.0.0.1");
   params->src_port = qp_cmdopt_src_port;
   params->input = qp_cmdopt_input;
   params->output = qp_cmdopt_output;
@@ -412,10 +412,13 @@ void qp_flow_set_env(QP_Application *app)
 
   /* 设置播放器初始音量 */
   qp_player_set_volume(player, params->volume);
+  qp_player_play(player);
 
   // 释放资源
-  g_string_free(params->uri, TRUE);
-  g_string_free(params->address, TRUE);
+  // g_string_free(params->src_address, TRUE);
+  // g_string_free(params->uri, TRUE);
+  // g_string_free(params->address, TRUE);
+  // g_string_free(params->address6, TRUE);
   g_free(params);
 }
 

@@ -3,83 +3,80 @@
 /**
  * 生成管道
  * @private
+ * @since 2.0.0
  * @param player 播放器对象
+ * @brief 使用字符串方式构建管道
  */
 void qp_player_make_pipeline(QP_Player *player)
 {
   //
-  // 定义各个部件对象
+  // 管道命令字符串
   //
-  GstElement *obj_src;
-  GstElement *obj_sink;
-  GstElement *obj_volume = gst_element_factory_make("volume", QP_PLAYER_ELEMENT_VOLUME);
-  GstElement *obj_audioconvert = gst_element_factory_make("audioconvert", QP_PLAYER_ELEMENT_AUDIOCONVERT);
-  GstElement *obj_resample = gst_element_factory_make("audioresample", QP_PLAYER_ELEMENT_RESAMPLE);
-  GstElement *obj_pipeline = gst_pipeline_new(QP_PLAYER_ELEMENT_PIPELINE);
+  GString* pipeline_string = g_string_new(NULL);
 
-  /* 播放源是URI资源的情况 */
-
-  if (player->opt_input == QP_SET_INPUT_TYPE_URI)
-  {
-    obj_src = gst_element_factory_make("uridecodebin", QP_PLAYER_ELEMENT_SRC);
-    g_object_set(obj_src, "uri", player->opt_uri->str, NULL);
+  //
+  // 1. 构建输入源指令字符串
+  //
+  
+  switch(player->opt_input) {
+    /* 输入源是FD */
+    case QP_SET_INPUT_TYPE_FD:
+      g_string_append_printf(pipeline_string, "fdsrc fd=3 timeout=1000");
+    break;
+    /* 输入源是UDP */
+    case QP_SET_INPUT_TYPE_UDP:
+      g_string_append_printf(pipeline_string, "udpsrc");
+    break;
+    /* 输入源是URI */
+    case QP_SET_INPUT_TYPE_URI:
+    default:
+      g_string_append_printf(pipeline_string, "uridecodebin uri=%s", player->opt_uri->str);
+    break;
   }
 
-  /* 播放源是UDP Src的情况 */
+  //
+  // 2. 构建音效组件字符串
+  //
 
-  if (player->opt_input == QP_SET_INPUT_TYPE_UDP)
-  {
-    obj_src = gst_element_factory_make("udpsrc", QP_PLAYER_ELEMENT_SRC);
+
+
+  //
+  // 3. 构建输出字符串
+  //
+  switch(player->opt_output) {
+    /* 本地音频设备输出播放 */
+    case QP_SET_OUTPUT_TYPE_LOCAL:
+    default:
+  #if __APPLE__
+      g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
+  #elif
+      // @TODO
+      // 这里没有添加alsasink的参数
+      // 之后开发调试的时候再添加
+      g_string_append_printf(pipeline_string, " ! alsasink name=sink");
+  #endif
+    break;
+    /* 网络广播输出播放 */
+    case QP_SET_OUTPUT_TYPE_NET:
+      g_string_append_printf(pipeline_string, 
+      " ! opusenc" \
+      " ! rtpopuspay" \
+      " ! .send_rtp_sink_0 rtpbin" \
+      " ! udpsink name=udpsink");
+    break;
   }
 
-  /* 播放源是fd的情况 */
-  /* @since 1.5.1 */
-  if(player->opt_input == QP_SET_INPUT_TYPE_FD)
-  {
-    // TODO 需要创建一个bin，包含fdsrc和decodebin
-  }
-
-  /* 输出源是ALSA设备的情况 */
-
-  if (player->opt_output == QP_SET_OUTPUT_TYPE_LOCAL)
-  {
-#if __APPLE__
-    obj_sink = gst_element_factory_make("autoaudiosink", QP_PLAYER_ELEMENT_SINK);
-#elif __linux__
-    obj_sink = gst_element_factory_make("alsaink", QP_PLAYER_ELEMENT_SINK);
-#endif
-  }
-
-  /* 输出源是网络广播 */
-
-  if (player->opt_output == QP_SET_OUTPUT_TYPE_NET)
-  {
-    // obj_sink = gst_element_factory_make("udpsink", QP_PLAYER_ELEMENT_SINK);
-    // g_object_set(obj_sink, "host", player->opt_address->str,
-    //              "port", player->opt_port,
-    //              NULL);
-    obj_sink = qp_player_make_rtp_bin(player);
-  }
-
-  /* 将所有的元件组合起来 */
-
-  gst_bin_add_many(GST_BIN(obj_pipeline), obj_src, obj_audioconvert, obj_volume, obj_resample, obj_sink, NULL);
+  /* 解析命令字符串,生成管道对象 */
+  GstElement* obj_pipeline = gst_parse_launch(pipeline_string->str, NULL);
   player->gst_pipeline = GST_PIPELINE(obj_pipeline);
-
-  /* 将中间组件连接 */
-  if (!gst_element_link_many(obj_audioconvert, obj_volume, obj_resample, obj_sink, NULL))
-  {
-    g_debug("Element can not be linked\n");
-    exit(-1);
-  }
 
   /* 设置消息总线监听 */
   GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(obj_pipeline));
   gst_bus_add_watch(bus, qp_player_bus_handler, player);
+  
+  /* 释放内存资源 */
+  g_string_free(pipeline_string, TRUE);
   gst_object_unref(bus);
-
-  /* 当输入源是URI资源的时候监听PAD完成事件 */
-  g_signal_connect(obj_src, "pad-added", G_CALLBACK(qp_player_pad_added_handler), obj_audioconvert);
 }
 
 /**
