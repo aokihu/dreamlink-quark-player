@@ -30,14 +30,17 @@ void qp_player_make_pipeline(QP_Player *player)
     /* 输入源是URI */
     case QP_SET_INPUT_TYPE_URI:
     default:
-      g_string_append_printf(pipeline_string, "uridecodebin uri=%s", player->opt_uri->str);
+      g_string_append_printf(pipeline_string, "uridecodebin uri=\"%s\"", player->opt_uri->str);
     break;
   }
 
   //
   // 2. 构建音效组件字符串
   //
-
+  g_string_append_printf(pipeline_string, 
+  " ! audioconvert"\
+  " ! volume name=volume"\
+  " ! audioresample");
 
 
   //
