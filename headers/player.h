@@ -18,15 +18,10 @@
 #define QP_PLAYER_ELEMENT_PIPELINE "pipeline"
 #define QP_PLAYER_ELEMENT_SRC "src"
 #define QP_PLAYER_ELEMENT_SINK "sink"
-#define QP_PLAYER_ELEMENT_AUDIOCONVERT "audioconvert"
-#define QP_PLAYER_ELEMENT_AUDIORATE "audiorate"
 #define QP_PLAYER_ELEMENT_VOLUME "volume"
+#define QP_PLAYER_ELEMENT_EQ "eq"
 #define QP_PLAYER_ELEMENT_RESAMPLE "resample"
 #define QP_PLAYER_ELEMENT_UDPSINK "udpsink"
-#define QP_PLAYER_ELEMENT_UDPSINK6 "udpsink6"
-#define QP_PLAYER_ELEMENT_TEE "tee"
-#define QP_PLYAER_ELEMENT_QUEUE "queue"
-#define QP_PLAYER_ELEMENT_QUEUE6 "queue6"
 #define QP_PLAYER_ELEMENT_OUPSENCODE "opusencode"
 #define QP_PLAYER_ELEMENT_RTPOPUSPAY "rtpopuspay"
 #define QP_PLAYER_ELEMENT_RTPSINKBIN "rtpsinkbin"
@@ -89,11 +84,6 @@ typedef struct _QP_Player
 // 私有方法
 //
 void qp_player_make_pipeline(QP_Player *player);
-GstElement *qp_player_make_rtp_bin(QP_Player *player);  // 创建rtp管道
-GstElement *qp_player_make_fd_bin(QP_Player *player);   // 创建fd管道
-
-void qp_player_pad_added_handler(GstElement *src, GstPad *pad, gpointer data);                // 动态增加pad回调方法
-void qp_player_decodebin_pad_added_handler(GstElement *decodebin, GstPad *pad, gpointer data);
 
 gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userdata);
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
