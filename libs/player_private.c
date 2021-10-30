@@ -21,8 +21,8 @@ void qp_player_make_pipeline(QP_Player *player)
   switch(player->opt_input) {
     /* 输入源是FD */
     case QP_SET_INPUT_TYPE_FD:
-      // 设定超时时间40ms
-      g_string_append_printf(pipeline_string, "fdsrc fd=3 timeout=40000");
+      // 使用标准输入fd=0
+      g_string_append_printf(pipeline_string, "fdsrc");
     break;
     /* 输入源是UDP */
     case QP_SET_INPUT_TYPE_UDP:
