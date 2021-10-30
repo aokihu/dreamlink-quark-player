@@ -121,8 +121,9 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
 
 void qp_slave_prepare(QP_Application *app)
 {
-  GIOChannel *channel = g_io_channel_unix_new(STDIN_FILENO);
-
+  // @since 2.0.2
+  // 使用文件描述符(3)
+  GIOChannel *channel = g_io_channel_unix_new(QP_SLAVE_CMD_FILENO);
   g_io_add_watch(channel, G_IO_IN, qp_slave_io_callback, app);
   g_io_channel_unref(channel);
 }
