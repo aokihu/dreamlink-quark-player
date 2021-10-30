@@ -21,7 +21,7 @@
 /**
  * 父进程与子进程之间发送命令的文件描述符编号
  */
-static guint QP_SLAVE_CMD_FILENO 3;
+#define QP_SLAVE_CMD_FILENO 3
 
 /**
  * 定义指令字符串数组
