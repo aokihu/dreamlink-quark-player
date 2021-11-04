@@ -56,7 +56,7 @@ void qp_player_make_pipeline(QP_Player *player)
     default:
   #if __APPLE__
       g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
-  #elif
+  #else
       // @TODO
       // 这里没有添加alsasink的参数
       // 之后开发调试的时候再添加
