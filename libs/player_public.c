@@ -36,22 +36,33 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   player->status = QP_PLAYER_STATUS_NOT_READY;
   player->timer_flag = 0;
 
-  // 设置URI
+  /* ------------------------------- */ 
+  /*             设置URI              */
+  /* ------------------------------- */
+
+  /* --------- 输入类型 = URI ------- */
   if (params->input == QP_SET_INPUT_TYPE_URI)
   {
     player->opt_uri = g_string_new(params->uri->str);
   }
 
+  /* --------- 输入类型 = UDP ------ */
+  if (params->input == QP_SET_INPUT_TYPE_UDP)
+  {
+    player->opt_uri = g_string_new("udp://");
+    g_string_append_printf(player->opt_uri, "%s:%s", params->src_address, params->src_port);
+  }
+
   /* 设置音量 */
   player->opt_volume = params->volume;
 
-  // 设置输出质量
+  /* 设置输出质量 */
   player->opt_quality = params->quality;
 
-  // 设置播放器输入模式
+  /* 设置播放器输入模式 */
   player->opt_input = params->input;
 
-  // 设置播放器输出模式
+  /* 设置播放器输出模式 */
   player->opt_output = params->output;
 
   switch (player->opt_output)
