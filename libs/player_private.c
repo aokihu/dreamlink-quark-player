@@ -25,7 +25,7 @@ void qp_player_make_pipeline(QP_Player *player)
       g_string_append_printf(pipeline_string, 
       "fdsrc !"
       "queue max-size-bytes=102400 min-threshold-bytes=2048 !"
-      "decodebin sink-caps=\"application/ogg\"");
+      "decodebin");
     break;
     /* 输入源是UDP */
     case QP_SET_INPUT_TYPE_UDP:
