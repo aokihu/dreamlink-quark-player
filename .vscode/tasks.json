@@ -4,7 +4,7 @@
 		{
 			"type": "shell",
 			"label": "C: gcc build active file",
-			"command": "make DEBUG=1",
+			"command": "make",
 			"args": [],
 			"options": {
 				"cwd": "${workspaceFolder}"

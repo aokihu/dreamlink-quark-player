@@ -4,9 +4,9 @@
       "name": "Mac",
       "includePath": [
         "${workspaceFolder}/**",
-        "/usr/local/Cellar/glib/2.70.0/include/glib-2.0",
-        "/usr/local/Cellar/glib/2.70.0/include/glib-2.0/glib",
-        "/usr/local/Cellar/gstreamer/1.18.4/include/gstreamer-1.0"
+        "/usr/local/Cellar/glib/2.70.2/include/glib-2.0",
+        "/usr/local/Cellar/glib/2.70.2/include/glib-2.0/glib",
+        "/usr/local/Cellar/gstreamer/1.18.5/include/gstreamer-1.0"
       ],
       "defines": [],
       "macFrameworkPath": [
