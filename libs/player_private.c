@@ -72,7 +72,7 @@ void qp_player_make_pipeline(QP_Player *player)
       " ! opusenc" \
       " ! rtpopuspay" \
       " ! .send_rtp_sink_0 rtpbin" \
-      " ! udpsink name=udpsink");
+      " ! udpsink name=udpsink ttl-mc=30"); /* 增加Multicast TTL参数 */
     break;
   }
 
