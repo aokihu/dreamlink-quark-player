@@ -122,7 +122,11 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
 
 void qp_slave_prepare(QP_Application *app)
 {
-  // @TODO 需要修复文件符号，否则会产生问题
+  //
+  // @TODO 由于错误的文件符号导致内存泄漏，需要针对开发模式和调试模式设置不同的文件符号
+  // @DATE 2022-5-4
+  // @STAT 未解决
+  //
   GIOChannel *channel = g_io_channel_unix_new(QP_SLAVE_CMD_FILENO);
   g_io_add_watch(channel, G_IO_IN, qp_slave_io_callback, app);
   g_io_channel_unref(channel);
