@@ -247,6 +247,15 @@ static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
         "Select ALSA sound card subdevice number, when output is [local]",
         "[subdevice number]",
     },
+    {
+        "alsa-device",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_CALLBACK,
+        (GOptionArgFunc *)qp_boot_cmdopt_check,
+        "Set ALSA device",
+        NULL,
+    },
     {NULL},
 };
 
