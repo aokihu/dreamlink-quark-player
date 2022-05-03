@@ -8,6 +8,7 @@
  *
  */
 
+#pragma once
 #ifndef QP_H_SETTING
 #define QP_H_SETTING
 
@@ -61,6 +62,7 @@ typedef struct _QP_CMD_PARAM
   GString *address;
   GString *address6;
   GString *src_address;
+  GPtrArray *alsa_devices;
   QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;
