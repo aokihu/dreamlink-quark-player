@@ -349,15 +349,16 @@ void qp_flow_print_env(QP_Application *application)
       g_string_append_printf(output_message,
                              "Output: local\n");
 
-      // @TODO 之后改成player属性，现在先直接读取全局静态变量值
-      gchar *dev = NULL;
-      guint i = 0;
-      while (NULL != (dev = qp_cmdopt_alsa_devices[i]))
+      // 打印ALSA设备信息
+      guint dev_idx = 0;
+      guint dev_count = player->opt_alsa_devices->len;
+
+      for (; dev_idx < dev_count; dev_idx += 1)
       {
-        g_string_append_vprintf(output_message,
-                                "ALSA Device: %s\n",
-                                *dev);
+        g_string_append_printf(output_message,
+                               "ALSA device: %s\n", (gchar *)g_ptr_array_index(player->opt_alsa_devices, dev_idx));
       }
+
       break;
     }
 
@@ -423,6 +424,18 @@ void qp_flow_set_env(QP_Application *app)
   params->volume = qp_cmdopt_volume;
   params->card = qp_cmdopt_card;
   params->card_sub = qp_cmdopt_card_sub;
+
+  // ALSA设备属性设置
+  params->alsa_devices = g_ptr_array_sized_new(4); /* 预保留4个元素的内存空间，但是实际数组长度依然是0 */
+
+  if (qp_cmdopt_alsa_devices != NULL)
+  {
+    char **d;
+    for (d = qp_cmdopt_alsa_devices; *d; d += 1)
+    {
+      g_ptr_array_add(params->alsa_devices, (gpointer)*d);
+    }
+  }
 
   // 播放器初始化
   QP_Player *player = app->player;
