@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * Slave模式交互
- * 
+ *
  * @author aokihu
  * @copyright Reasonbox
- * 
+ *
  */
 
 #include "application.h"
@@ -16,7 +16,6 @@
 
 #ifndef QP_H_SLAVE
 #define QP_H_SLAVE
-
 
 /**
  * 父进程与子进程之间发送命令的文件描述符编号
@@ -42,11 +41,11 @@ typedef struct _QP_SLAVE_COMMAND
 } QP_SlaveCommand;
 
 /**
- * 
+ *
  * QP_SlaveFunc:
  * @QP_SlaveCommand 解析后的命令数据
  * @data 附加的数据
- * 
+ *
  */
 typedef void (*QP_SlaveFunc)(QP_SlaveCommand *cmd, gpointer data);
 
