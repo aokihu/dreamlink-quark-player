@@ -96,18 +96,19 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
                                                    NULL,
                                                    &error);
 
+  g_print("IO Callback\n");
   switch (status)
   {
   case G_IO_STATUS_NORMAL:
-  {
     qp_slave_parse_command(message, app);
     g_string_free(message, TRUE);
-    return TRUE;
-  }
+    break;
+  // return TRUE;
+  default:
+  case G_IO_STATUS_EOF:
   case G_IO_STATUS_ERROR:
-  {
     g_printerr("read stdin error\n");
-  }
+    break;
   }
 
   return TRUE;
@@ -121,8 +122,7 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
 
 void qp_slave_prepare(QP_Application *app)
 {
-  // @since 2.0.2
-  // 使用文件描述符(3)
+  // @TODO 需要修复文件符号，否则会产生问题
   GIOChannel *channel = g_io_channel_unix_new(QP_SLAVE_CMD_FILENO);
   g_io_add_watch(channel, G_IO_IN, qp_slave_io_callback, app);
   g_io_channel_unref(channel);
