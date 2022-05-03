@@ -438,12 +438,11 @@ void qp_flow_set_env(QP_Application *app)
   }
 
   // 播放器初始化
-  QP_Player *player = app->player;
-  qp_player_init(player, params);
+  qp_player_init(app->player, params);
 
   /* 设置播放器初始音量 */
-  qp_player_set_volume(player, params->volume);
-  qp_player_play(player);
+  qp_player_set_volume(app->player, params->volume);
+  qp_player_play(app->player);
 
   // 释放资源
   // g_string_free(params->src_address, TRUE);
