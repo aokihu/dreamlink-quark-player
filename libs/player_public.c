@@ -50,7 +50,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   if (params->input == QP_SET_INPUT_TYPE_UDP)
   {
     player->opt_uri = g_string_new("udp://");
-    g_string_append_printf(player->opt_uri, "%s:%s", params->src_address, params->src_port);
+    g_string_append_printf(player->opt_uri, "%s:%d", params->src_address->str, params->src_port);
   }
 
   /* 设置音量 */
