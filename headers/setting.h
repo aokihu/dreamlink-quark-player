@@ -1,11 +1,11 @@
 /**
- * 配置数据定义 
- * 
+ * 配置数据定义
+ *
  * @author aokihu <aokihu@gmail.com>
  * @copyright Reasonbox
  * @version 1.1.0
  * @date Mon Apr  5 16:43:03 CST 2021
- * 
+ *
  */
 
 #ifndef QP_H_SETTING
@@ -19,9 +19,9 @@
  */
 typedef enum _QP_SET_INPUT_TYPE
 {
-  QP_SET_INPUT_TYPE_URI,  // 使用URI作为输入
-  QP_SET_INPUT_TYPE_UDP,  // 使用udp socket作为输入
-  QP_SET_INPUT_TYPE_FD,   // 使用文件描述符作为输入
+  QP_SET_INPUT_TYPE_URI, // 使用URI作为输入
+  QP_SET_INPUT_TYPE_UDP, // 使用udp socket作为输入
+  QP_SET_INPUT_TYPE_FD,  // 使用文件描述符作为输入
 } QP_SET_INPUT_TYPE;
 
 /**
@@ -48,7 +48,7 @@ typedef enum _QP_SET_QUALITY
 /**
  * 启动参数结构体
  * @struct QP_CmdParam
- * 
+ *
  */
 typedef struct _QP_CMD_PARAM
 {
