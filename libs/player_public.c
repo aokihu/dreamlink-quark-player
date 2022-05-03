@@ -36,7 +36,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   player->status = QP_PLAYER_STATUS_NOT_READY;
   player->timer_flag = 0;
 
-  /* ------------------------------- */ 
+  /* ------------------------------- */
   /*             设置URI              */
   /* ------------------------------- */
 
@@ -75,6 +75,7 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
   case QP_SET_OUTPUT_TYPE_LOCAL:
     player->opt_card = params->card;
     player->opt_card_sub = params->card_sub;
+    player->opt_alsa_devices = params->alsa_devices;
     break;
   }
 
@@ -99,8 +100,9 @@ extern void qp_player_play(QP_Player *player)
     // 如果是UDP输出，设置广播端口和地址
     //
 
-    if(player->opt_output == QP_SET_OUTPUT_TYPE_NET) {
-      GstElement* sink = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_UDPSINK);
+    if (player->opt_output == QP_SET_OUTPUT_TYPE_NET)
+    {
+      GstElement *sink = gst_bin_get_by_name_recurse_up(GST_BIN(player->gst_pipeline), QP_PLAYER_ELEMENT_UDPSINK);
       g_signal_emit_by_name(sink, "add", player->opt_address->str, player->opt_port);
       g_signal_emit_by_name(sink, "add", player->opt_address6->str, player->opt_port);
       gst_object_unref(sink);
