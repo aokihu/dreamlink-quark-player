@@ -355,7 +355,7 @@ void qp_flow_print_env(QP_Application *application)
     case QP_SET_OUTPUT_TYPE_LOCAL:
       g_string_append_printf(output_message,
                              "Output: local\n"
-                             "Alsa Card: %d:%d\n",
+                             "Alsa device: %d:%d\n",
                              player->opt_card, player->opt_card_sub);
       break;
     }
