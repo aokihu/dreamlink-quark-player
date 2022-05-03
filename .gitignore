@@ -57,3 +57,5 @@ obj/
 
 *.dot
 *.png
+
+.vscode/*.log
