@@ -5,23 +5,24 @@
 static GString *qp_cmdopt_uri;
 static GString *qp_cmdopt_address;
 static GString *qp_cmdopt_address6;
-static guint qp_cmdopt_port;                                          // 端口号 
-static guint qp_cmdopt_src_port;                                      // 输入源是UDP模式时，输入的UDP端口号
-static GString *qp_cmdopt_src_address;                                // 输入源是UDP模式时，驶入的UDP地址
-static guint qp_cmdopt_card = 0;                                      // 输出是local模式时的声卡编号
-static guint qp_cmdopt_card_sub = 0;                                  // 输出是local模式时声卡子设备编号
-static guint qp_cmdopt_volume = 60;                                   // 启动时播放器的音量
-static gboolean qp_cmdopt_silent = FALSE;                             // 静默模式
-static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;     // 输入源类型
-static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET;  // 输出源类型
-static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;      // 音质质量
+static guint qp_cmdopt_port;                                         // 端口号
+static guint qp_cmdopt_src_port;                                     // 输入源是UDP模式时，输入的UDP端口号
+static GString *qp_cmdopt_src_address;                               // 输入源是UDP模式时，驶入的UDP地址
+static guint qp_cmdopt_card = 0;                                     // 输出是local模式时的声卡编号
+static guint qp_cmdopt_card_sub = 0;                                 // 输出是local模式时声卡子设备编号
+static GString *qp_cmdopt_alsa_device;                               // ALSA设备名称,当输出模式是'local'模式的时候
+static guint qp_cmdopt_volume = 60;                                  // 启动时播放器的音量
+static gboolean qp_cmdopt_silent = FALSE;                            // 静默模式
+static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;    // 输入源类型
+static QP_SET_OUTPUT_TYPE qp_cmdopt_output = QP_SET_OUTPUT_TYPE_NET; // 输出源类型
+static QP_SET_QUALITY qp_cmdopt_quality = QP_SET_QUALITY_NORMAL;     // 音质质量
 
 /**
  * 检查输入参数
  * @private
  * @param option_name 参数名称，前面有'--'或者'-'
  * @param value 参数输入的值
- * @param data 
+ * @param data
  * @param error 返回错误信息的数据对象
  */
 static gboolean qp_boot_cmdopt_check(
@@ -98,7 +99,7 @@ static gboolean qp_boot_cmdopt_check(
       return TRUE;
     }
 
-    if(!g_ascii_strcasecmp("fd", value))
+    if (!g_ascii_strcasecmp("fd", value))
     {
       qp_cmdopt_input = QP_SET_INPUT_TYPE_FD;
       return TRUE;
