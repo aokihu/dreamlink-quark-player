@@ -254,7 +254,7 @@ static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
         G_OPTION_ARG_CALLBACK,
         (GOptionArgFunc *)qp_boot_cmdopt_check,
         "Set ALSA device",
-        NULL,
+        "[ALSA device name]",
     },
     {NULL},
 };
