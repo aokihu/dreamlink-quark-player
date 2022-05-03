@@ -8,20 +8,20 @@
       "name": "clang",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}/qplayer",
+      "program": "${fileDirname}/quark",
       "args": [
-        "--uri",
-        "file:///Users/aokihu/Projects/Dreamlink/test.mp3",
-        "--output-address",
-        "127.0.0.1",
-        "--ouput-port",
-        "20000"
+        "--input=uri",
+        "--uri=file:///home/aokihu/test.mp3",
+        "--output=local",
+        "--alsa-device=CARD_1",
+        "--alsa-device=CARD_2",
+        "--alsa-device=CARD_3",
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "lldb",
+      "MIMode": "gdb",
       "preLaunchTask": "C: gcc build active file"
     }
   ]
