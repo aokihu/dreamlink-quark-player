@@ -6,6 +6,10 @@ OS := $(shell uname)
 # 
 CFLAGS += -Wall -std=c11
 
+ifdef DEBUG
+CFLAGS += -g
+endif
+
 # 编译器针对操作系统进行设定
 ifeq ($(OS), Linux)
 	cc := gcc
