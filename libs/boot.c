@@ -88,6 +88,13 @@ static gboolean qp_boot_cmdopt_check(
     return TRUE;
   }
 
+  // 检查<alsa-device参数
+  if (!g_ascii_strcasecmp("--alsa-device", option_name))
+  {
+    qp_cmdopt_alsa_device = g_string_new(value);
+    return TRUE;
+  }
+
   /*----- 输入组参数配置 -----*/
 
   // 检查<input>参数
