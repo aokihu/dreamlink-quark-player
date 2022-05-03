@@ -10,7 +10,7 @@ static guint qp_cmdopt_src_port;                                     // 输入�
 static GString *qp_cmdopt_src_address;                               // 输入源是UDP模式时，驶入的UDP地址
 static guint qp_cmdopt_card = 0;                                     // 输出是local模式时的声卡编号
 static guint qp_cmdopt_card_sub = 0;                                 // 输出是local模式时声卡子设备编号
-static GString *qp_cmdopt_alsa_device;                               // ALSA设备名称,当输出模式是'local'模式的时候
+static gchar **qp_cmdopt_alsa_devices = NULL;                        // ALSA设备名称,当输出模式是'local'模式的时候
 static guint qp_cmdopt_volume = 60;                                  // 启动时播放器的音量
 static gboolean qp_cmdopt_silent = FALSE;                            // 静默模式
 static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;    // 输入源类型
@@ -85,13 +85,6 @@ static gboolean qp_boot_cmdopt_check(
   if (!g_ascii_strcasecmp("--output-address6", option_name))
   {
     qp_cmdopt_address6 = g_string_new(value);
-    return TRUE;
-  }
-
-  // 检查<alsa-device参数
-  if (!g_ascii_strcasecmp("--alsa-device", option_name))
-  {
-    qp_cmdopt_alsa_device = g_string_new(value);
     return TRUE;
   }
 
@@ -258,10 +251,10 @@ static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
         "alsa-device",
         0,
         G_OPTION_FLAG_NONE,
-        G_OPTION_ARG_CALLBACK,
-        (GOptionArgFunc *)qp_boot_cmdopt_check,
-        "Set ALSA device, there may be multi device name, sperate with comma. e.g. Card1,Card2",
-        "[Card1,Card2,...]",
+        G_OPTION_ARG_STRING_ARRAY,
+        &qp_cmdopt_alsa_devices,
+        "Set ALSA device, there may be multi device name, sperate with comma. e.g. --alsa-device=card_1 --alsa--device=card_2",
+        "card-name",
     },
     {NULL},
 };
@@ -354,9 +347,17 @@ void qp_flow_print_env(QP_Application *application)
       break;
     case QP_SET_OUTPUT_TYPE_LOCAL:
       g_string_append_printf(output_message,
-                             "Output: local\n"
-                             "Alsa device: %d:%d\n",
-                             player->opt_card, player->opt_card_sub);
+                             "Output: local\n");
+
+      // @TODO 之后改成player属性，现在先直接读取全局静态变量值
+      gchar *dev = NULL;
+      guint i = 0;
+      while (NULL != (dev = qp_cmdopt_alsa_devices[i]))
+      {
+        g_string_append_vprintf(output_message,
+                                "ALSA Device: %s\n",
+                                *dev);
+      }
       break;
     }
 
