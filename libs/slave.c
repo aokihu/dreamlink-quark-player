@@ -95,17 +95,25 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
                                                    message,
                                                    NULL,
                                                    &error);
+  // SECTION 新添加未测试代码, 用于处理stdin读取错误
+  // 错误捕获
+  if (error != NULL)
+  {
+    g_printerr("Stdin error: %s\n", error->message);
+    g_error_free(error);
+    return FALSE;
+  }
+  // !SECTION
 
-  g_print("IO Callback\n");
   switch (status)
   {
   case G_IO_STATUS_NORMAL:
     qp_slave_parse_command(message, app);
     g_string_free(message, TRUE);
     break;
-  // return TRUE;
   default:
   case G_IO_STATUS_EOF:
+    break;
   case G_IO_STATUS_ERROR:
     g_printerr("read stdin error\n");
     break;
@@ -122,11 +130,6 @@ gboolean qp_slave_io_callback(GIOChannel *channel,
 
 void qp_slave_prepare(QP_Application *app)
 {
-  //
-  // @TODO 由于错误的文件符号导致内存泄漏，需要针对开发模式和调试模式设置不同的文件符号
-  // @DATE 2022-5-4
-  // @STAT 未解决
-  //
   GIOChannel *channel = g_io_channel_unix_new(QP_SLAVE_CMD_FILENO);
   g_io_add_watch(channel, G_IO_IN, qp_slave_io_callback, app);
   g_io_channel_unref(channel);
