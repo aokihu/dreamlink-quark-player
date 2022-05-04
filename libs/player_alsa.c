@@ -13,7 +13,7 @@ GString *qp_player_alsa_sink_generate(QP_Player *player)
     // 当参数中没有设置ALSA设备的时候, 直接返回alsasink
     if (alsa_devices->len == 0)
     {
-        GString *sink = g_string_new("alsasink");
+        GString *sink = g_string_new(" ! alsasink");
         return sink;
     }
 
