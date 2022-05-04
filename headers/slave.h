@@ -28,7 +28,7 @@
  * RELEASE: 文件描述符为3
  */
 
-#ifdef __DEBUG__
+#ifdef DEBUG
 #define QP_SLAVE_CMD_FILENO 0
 #else
 #define QP_SLAVE_CMD_FILENO 3
