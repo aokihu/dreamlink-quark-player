@@ -7,7 +7,7 @@ OS := $(shell uname)
 CFLAGS += -Wall -std=c11
 
 ifdef DEBUG
-CFLAGS += -g -DDEBUG
+CFLAGS += -ggdb -DDEBUG
 endif
 
 # 编译器针对操作系统进行设定
