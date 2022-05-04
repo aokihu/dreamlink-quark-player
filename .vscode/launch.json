@@ -3,12 +3,12 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-  "configurations": [
+  "configurations": [ 
     {
-      "name": "clang",
+      "name": "linux",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${fileDirname}/quark",
+      "program": "${workspaceFolder}/quark",
       "args": [
         "--input=uri",
         "--uri=file:///home/aokihu/test.mp3",
@@ -23,6 +23,26 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "preLaunchTask": "C: gcc build active file"
-    }
+    },
+    {
+      "name": "macos",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/quark",
+      "args": [
+        "--input=uri",
+        "--uri=file:///../test.mp3",
+        "--output=local",
+        "--alsa-device=CARD_1",
+        "--alsa-device=CARD_2",
+        "--alsa-device=CARD_3",
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "C: gcc build active file"
+    },
   ]
 }
