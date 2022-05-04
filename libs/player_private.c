@@ -80,10 +80,10 @@ void qp_player_make_pipeline(QP_Player *player)
 
   g_print("Launch string: %s\n", pipeline_string->str);
 
-  GError *error;
+  GError *error = NULL;
   GstElement *obj_pipeline = gst_parse_launch(pipeline_string->str, &error);
 
-  if (obj_pipeline == NULL)
+  if (error != NULL)
   {
     g_printerr("Parse launch error: %s\n", error->message);
     g_error_free(error);
