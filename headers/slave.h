@@ -19,8 +19,20 @@
 
 /**
  * 父进程与子进程之间发送命令的文件描述符编号
+ * @since 0.2.2
+ * @brief
+ * 针对不同的发布模式设置不同的文件描述
+ * 不正确的描述符会发生IO错误, 从而导致内存泄漏
+ *
+ * DEBUG: 文件描述符为0
+ * RELEASE: 文件描述符为3
  */
+
+#ifdef __DEBUG__
+#define QP_SLAVE_CMD_FILENO 0
+#else
 #define QP_SLAVE_CMD_FILENO 3
+#endif
 
 /**
  * 定义指令字符串数组
