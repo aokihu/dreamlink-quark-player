@@ -31,7 +31,7 @@
       "program": "${workspaceFolder}/quark",
       "args": [
         "--input=uri",
-        "--uri=file:///../test.mp3",
+        "--uri=file:///Users/aokihu/Downloads/test.mp3",
         "--output=local",
         "--alsa-device=CARD_1",
         "--alsa-device=CARD_2",
@@ -39,7 +39,8 @@
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
-      "environment": [],
+      "environment": [
+      ],
       "externalConsole": false,
       "MIMode": "lldb",
       "preLaunchTask": "C: gcc build active file"
