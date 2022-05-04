@@ -90,6 +90,7 @@ gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userda
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
 gboolean qp_player_position_handler(gpointer userdata);
 void qp_player_status_changed_handler(GstMessage *message, gpointer userdata);
+GString *qp_player_alsa_sink_generate(QP_Player *player); // 生成ALSA Sink字符串
 
 //
 // 公开方法

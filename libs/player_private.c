@@ -52,19 +52,19 @@ void qp_player_make_pipeline(QP_Player *player)
   //
   // 3. 构建输出字符串
   //
+  GString *alsa_sink = NULL;
   switch (player->opt_output)
   {
   /* 本地音频设备输出播放 */
   case QP_SET_OUTPUT_TYPE_LOCAL:
   default:
-#if __APPLE__
-    g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
-#else
-    // @TODO
-    // 这里没有添加alsasink的参数
-    // 之后开发调试的时候再添加
-    g_string_append_printf(pipeline_string, " ! alsasink name=sink");
-#endif
+    // #ifdef __APPLE__
+    // g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
+    // #else
+    alsa_sink = qp_player_alsa_sink_generate(player);
+    g_string_append(pipeline_string, alsa_sink->str);
+    g_string_free(alsa_sink, TRUE);
+    // #endif
     break;
   /* 网络广播输出播放 */
   case QP_SET_OUTPUT_TYPE_NET:
@@ -79,6 +79,12 @@ void qp_player_make_pipeline(QP_Player *player)
   /* 解析命令字符串,生成管道对象 */
 
   g_print("Launch string: %s\n", pipeline_string->str);
+
+  // SECTION 由于Brew现在还没有更新gstream,没办法在macos上正常开发,暂时先退出.之后删除该代码
+#ifdef __APPLE__
+  exit(0);
+#endif
+  // !SECTION
 
   GError *error = NULL;
   GstElement *obj_pipeline = gst_parse_launch(pipeline_string->str, &error);
