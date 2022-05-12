@@ -72,19 +72,13 @@ void qp_player_make_pipeline(QP_Player *player)
                            " ! opusenc"
                            " ! rtpopuspay"
                            " ! .send_rtp_sink_0 rtpbin"
-                           " ! udpsink name=udpsink auto-multicast ttl-mc=30"); /* 增加Multicast TTL参数 */
+                           " ! udpsink name=udpsink auto-multicast=true ttl-mc=30"); /* 增加Multicast TTL参数 */
     break;
   }
 
   /* 解析命令字符串,生成管道对象 */
 
   g_print("Launch string: %s\n", pipeline_string->str);
-
-  // SECTION 由于Brew现在还没有更新gstream,没办法在macos上正常开发,暂时先退出.之后删除该代码
-#ifdef __APPLE__
-  exit(0);
-#endif
-  // !SECTION
 
   GError *error = NULL;
   GstElement *obj_pipeline = gst_parse_launch(pipeline_string->str, &error);
