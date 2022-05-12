@@ -58,13 +58,13 @@ void qp_player_make_pipeline(QP_Player *player)
   /* 本地音频设备输出播放 */
   case QP_SET_OUTPUT_TYPE_LOCAL:
   default:
-    // #ifdef __APPLE__
-    // g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
-    // #else
+#ifdef __APPLE__
+    g_string_append_printf(pipeline_string, " ! autoaudiosink name=sink");
+#else
     alsa_sink = qp_player_alsa_sink_generate(player);
     g_string_append(pipeline_string, alsa_sink->str);
     g_string_free(alsa_sink, TRUE);
-    // #endif
+#endif
     break;
   /* 网络广播输出播放 */
   case QP_SET_OUTPUT_TYPE_NET:
