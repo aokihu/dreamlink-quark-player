@@ -45,7 +45,6 @@ typedef enum _QP_PLAYER_STATUS
 } QP_PLAYER_STATUS;
 
 /**
- *
  * 播放器结构体定义
  * @struct QP_Player
  * @property status_ready 播放器准备状态,初始化完成后状态为TRUE
@@ -55,14 +54,12 @@ typedef enum _QP_PLAYER_STATUS
  */
 typedef struct _QP_Player
 {
-  // 状态定义
+  /* 状态定义 */
   gboolean status_ready;
   QP_PLAYER_STATUS status;
   guint timer_flag; // 定时器句柄
 
-  //
-  // 参数定义
-  //
+  /* 参数定义 */
   GString *opt_uri;              // 播放资源uri地址
   guint opt_port;                // 广播端口
   GString *opt_address;          // IPv4输出地址
