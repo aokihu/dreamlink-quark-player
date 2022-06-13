@@ -46,12 +46,7 @@ ifeq ($(OS), Darwin)
 endif
 
 # 增加GLib和GStreamer的C连接库和头文件
-ifdef PKG_CONFIG_PREFIX
-CFLAGS += $(shell $(PKGCONFIG) --define-variable=prefix=$(PKG_CONFIG_PREFIX) --cflags --libs $(LIB-DEPENDS))
-else
-CFLAGS += $(shell $(PKGCONFIG) --cflags --libs $(LIB-DEPENDS))
-endif
-
+CFLAGS +=`$(PKGCONFIG) --cflags --libs $(LIB-DEPENDS)`
 
 # 添加CFLAGS参数
 CC += $(CFLAGS)
