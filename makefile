@@ -15,7 +15,7 @@ CC:=$(CC)
 PKGCONFIG:=$(PKGCONFIG)
 CFLAGS:=$(CFLAGS)
 LIBTOOL:=$(LIBTOOL)
-LIB-DEPENDS:=gstreamer-1.0 glib-2.0 gio-2.0
+PKG_LIB_DEPENDS:=gstreamer-1.0 glib-2.0 gio-2.0
 
 #
 # 检测OS名称,Darwin(Mac OS) - Linux(Linux)
@@ -45,13 +45,13 @@ endif
 
 ifeq ($(OS), Darwin)
 	CC:=clang
-	ifdef PKGCONFIG
+	ifndef PKGCONFIG
 		PKGCONFIG=/usr/local/bin/pkg-config
 	endif
 endif
 
 # 增加GLib和GStreamer的C连接库和头文件
-CFLAGS +=`$(PKGCONFIG) --cflags --libs $(LIB-DEPENDS)`
+CFLAGS += $(shell $(PKGCONFIG) --cflags --libs $(PKG_LIB_DEPENDS))
 
 # 添加CFLAGS参数
 CC += $(CFLAGS)
