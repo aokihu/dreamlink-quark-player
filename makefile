@@ -1,5 +1,26 @@
+#########################################
+# 
+# Quark Player Makefile
+#
+# @author aokihu <aokihu@gmail.com>
+# @version v2.2.2
+#
+#########################################
+
+#
+# 将命令程序全部用变量代替
+#
+OS:=$(OS)
+CC:=$(CC)
+CFLAGS:=$(CFLAGS)
+LIBTOOL:=$(LIBTOOL)
+
+#
 # 检测OS名称,Darwin(Mac OS) - Linux(Linux)
-OS := $(shell uname)
+#
+ifndef OS
+OS:=$(shell uname)
+endif
 
 # 
 # CFLAGS 参数设置
@@ -10,23 +31,17 @@ ifdef DEBUG
 CFLAGS += -ggdb -DDEBUG
 endif
 
+
+
 # 编译器针对操作系统进行设定
 ifeq ($(OS), Linux)
-	cc := gcc
+	CC:=gcc
 	PKGCONFIG=pkg-config
 endif
 
 ifeq ($(OS), Darwin)
-	cc := clang
+	CC:=clang
 	PKGCONFIG=/usr/local/bin/pkg-config
-endif
-
-
-# 交叉编译器前缀
-ifdef CROSS_COMPLIER
-	CC = $(CROSS_COMPLIER)-$(cc)
-else 
-	CC = $(cc)
 endif
 
 # 增加GLib和GStreamer的C连接库和头文件
@@ -36,7 +51,10 @@ CC += $(CFLAGS)
 
 # 连接器根据操作系统进行设定
 ifeq ($(OS), Linux)
-  LD := libtool --mode=link $(CC)
+	ifndef LIBTOOL
+		LIBTOOL:=libtool
+	endif
+  LD := $(LIBTOOL) --mode=link $(CC)
 else
   LD := $(CC)
 endif
@@ -68,7 +86,13 @@ $(DIRS):
 $(objects) : %.o : %.c
 	$(CC) -c $< -o $(obj)/$@
 
-.PHONY : clean
+.PHONY : clean test
+
+test:
+	@echo $(OS)
+	@echo $(CC)
+	@echo $(LIBTOOL)
 
 clean:
 	rm -rf $(DIRS)
+	rm quark
