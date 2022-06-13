@@ -12,6 +12,7 @@
 #
 OS:=$(OS)
 CC:=$(CC)
+PKGCONFIG:=$(PKGCONFIG)
 CFLAGS:=$(CFLAGS)
 LIBTOOL:=$(LIBTOOL)
 LIB-DEPENDS:=gstreamer-1.0 glib-2.0 gio-2.0
@@ -37,12 +38,16 @@ endif
 # 编译器针对操作系统进行设定
 ifeq ($(OS), Linux)
 	CC:=gcc
-	PKGCONFIG=pkg-config
+	ifndef PKGCONFIG
+		PKGCONFIG=pkg-config
+	endif
 endif
 
 ifeq ($(OS), Darwin)
 	CC:=clang
-	PKGCONFIG=/usr/local/bin/pkg-config
+	ifdef PKGCONFIG
+		PKGCONFIG=/usr/local/bin/pkg-config
+	endif
 endif
 
 # 增加GLib和GStreamer的C连接库和头文件
