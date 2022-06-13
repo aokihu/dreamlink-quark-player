@@ -14,6 +14,7 @@ OS:=$(OS)
 CC:=$(CC)
 CFLAGS:=$(CFLAGS)
 LIBTOOL:=$(LIBTOOL)
+LIB-DEPENDS:=gstreamer-1.0 glib-2.0 gio-2.0
 
 #
 # 检测OS名称,Darwin(Mac OS) - Linux(Linux)
@@ -45,7 +46,13 @@ ifeq ($(OS), Darwin)
 endif
 
 # 增加GLib和GStreamer的C连接库和头文件
-CFLAGS += $(shell $(PKGCONFIG) --cflags --libs gstreamer-1.0 glib-2.0 gio-2.0)
+ifdef PKG_CONFIG_PREFIX
+CFLAGS += $(shell $(PKGCONFIG) --define-variable=prefix=$(PKG_CONFIG_PREFIX) --cflags --libs $(LIB-DEPENDS))
+else
+CFLAGS += $(shell $(PKGCONFIG) --cflags --libs $(LIB-DEPENDS))
+endif
+
+
 # 添加CFLAGS参数
 CC += $(CFLAGS)
 
@@ -54,9 +61,9 @@ ifeq ($(OS), Linux)
 	ifndef LIBTOOL
 		LIBTOOL:=libtool
 	endif
-  LD := $(LIBTOOL) --mode=link --tag=CXX $(CC)
+  COMPLIER:=$(LIBTOOL) --mode=link --tag=CXX $(CC)
 else
-  LD := $(CC)
+  COMPLIER:=$(CC)
 endif
 
 
@@ -77,7 +84,7 @@ objects := $(addsuffix .o,$(targets))
 # 主生成目标
 # 生成名字是terminal的程序文件
 quark : $(DIRS) $(objects)
-	$(LD) -o quark $(addprefix $(obj)/, $(objects));
+	$(COMPLIER) -o quark $(addprefix $(obj)/, $(objects));
 
 $(DIRS):
 	mkdir $@
