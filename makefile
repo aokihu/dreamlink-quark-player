@@ -54,7 +54,7 @@ ifeq ($(OS), Linux)
 	ifndef LIBTOOL
 		LIBTOOL:=libtool
 	endif
-  LD := $(LIBTOOL) --mode=link $(CC)
+  LD := $(LIBTOOL) --mode=link --tag=CXX $(CC)
 else
   LD := $(CC)
 endif
