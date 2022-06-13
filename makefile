@@ -37,14 +37,19 @@ endif
 
 # 编译器针对操作系统进行设定
 ifeq ($(OS), Linux)
-	CC:=gcc
+	ifndef CC
+		CC:=gcc
+	endif
+
 	ifndef PKGCONFIG
 		PKGCONFIG=pkg-config
 	endif
 endif
 
 ifeq ($(OS), Darwin)
-	CC:=clang
+	ifndef CC
+		CC:=clang
+	endif
 	ifndef PKGCONFIG
 		PKGCONFIG=/usr/local/bin/pkg-config
 	endif
