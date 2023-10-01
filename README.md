@@ -1,6 +1,6 @@
 ## Dreamlink Quark Player 说明文档
 
-> 当前版本: 1.5.0
+> 当前版本: 2.1.0
 
 **Dreamlink Quark Player**是运行在服务器端的播放器程序，主要实现功能如下
 
