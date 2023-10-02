@@ -33,7 +33,10 @@
     "system_error": "c",
     "tuple": "c",
     "type_traits": "c",
-    "vector": "c"
+    "vector": "c",
+    "util.h": "c",
+    "utils.h": "c",
+    "error.h": "c"
   },
   "C_Cpp.dimInactiveRegions": true
 }
