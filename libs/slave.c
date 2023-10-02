@@ -1,4 +1,5 @@
 #include "../headers/slave.h"
+#include "../headers/utils.h"
 
 //
 // 全局静态变量定义
@@ -17,6 +18,7 @@ static QP_SlaveCommandItem QP_SLAVE_COMMAND_LIST[] = {
  * @param data 附加的数据，一般就是application
  * @return void
  */
+
 void qp_slave_cb_quit(QP_SlaveCommand *cmd, gpointer data)
 {
   QP_Application *app = data;
@@ -62,7 +64,7 @@ void qp_slave_parse_command(GString *message, QP_Application *app)
       break;
 
     // 匹配指令字符串
-    if (!g_ascii_strcasecmp(args[0], item.cmd_name))
+    if (qp_utils_strequal(args[0], item.cmd_name))
     {
       QP_SlaveFunc func = item.func;
       cmd->raw_command = args[0];

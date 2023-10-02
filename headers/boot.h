@@ -12,6 +12,7 @@
 #include "player.h"
 #include "setting.h"
 #include "slave.h"
+#include "utils.h"
 
 #include <glib.h>
 
