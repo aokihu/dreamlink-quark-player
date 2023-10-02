@@ -49,7 +49,7 @@ void qp_player_error_handler(GstMessage *message, gpointer userdata)
     {
 
       /* 如果是udpsink发出的错误，多半就是无法加入到IPv6广播 */
-      if (qp_utils_strequal(message->src->name, QP_PLAYER_ELEMENT_UDPSINK))
+      if (qp_utils_str_equal(message->src->name, QP_PLAYER_ELEMENT_UDPSINK))
       {
         /* 移除IPv6广播资源 */
         g_signal_emit_by_name(message->src, "remove", player->opt_address6->str, player->opt_port);

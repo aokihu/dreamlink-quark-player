@@ -64,7 +64,7 @@ void qp_slave_parse_command(GString *message, QP_Application *app)
       break;
 
     // 匹配指令字符串
-    if (qp_utils_strequal(args[0], item.cmd_name))
+    if (qp_utils_str_equal(args[0], item.cmd_name))
     {
       QP_SlaveFunc func = item.func;
       cmd->raw_command = args[0];
