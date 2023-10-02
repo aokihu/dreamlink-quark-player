@@ -28,11 +28,13 @@ typedef enum _QP_SET_INPUT_TYPE
 /**
  * 输出类型枚举
  * @enum QP_SET_OUTPUT_TYPE
+ * @brief 3.0.0 增加Fusion输出方式，可以同时输出到NET和LOCAL
  */
 typedef enum _QP_SET_OUTPUT_TYPE
 {
-  QP_SET_OUTPUT_TYPE_NET,   // 网络广播输出
-  QP_SET_OUTPUT_TYPE_LOCAL, // 本地声卡输出
+  QP_SET_OUTPUT_TYPE_NET,    // 网络广播输出
+  QP_SET_OUTPUT_TYPE_LOCAL,  // 本地声卡输出
+  QP_SET_OUTPUT_TYPE_FUSION, // 混合输出，同时兼容网络与本地声卡输出
 } QP_SET_OUTPUT_TYPE;
 
 /**
