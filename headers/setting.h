@@ -51,7 +51,7 @@ typedef enum _QP_SET_QUALITY
 /**
  * 启动参数结构体
  * @struct QP_CmdParam
- *
+ * @brief 自3.0.0开始，增加字段output_list，用于设置混合输出的参数
  */
 typedef struct _QP_CMD_PARAM
 {
@@ -65,6 +65,7 @@ typedef struct _QP_CMD_PARAM
   GString *address6;
   GString *src_address;
   GPtrArray *alsa_devices;
+  GPtrArray *output_list;
   QP_SET_INPUT_TYPE input;
   QP_SET_OUTPUT_TYPE output;
   QP_SET_QUALITY quality;

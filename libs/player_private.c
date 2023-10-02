@@ -52,7 +52,7 @@ void qp_player_make_pipeline(QP_Player *player)
   //
   // 3. 构建输出字符串
   //
-  GString *alsa_sink = NULL;
+  // GString *alsa_sink = NULL;
   switch (player->opt_output)
   {
   /* 本地音频设备输出播放 */
@@ -73,6 +73,23 @@ void qp_player_make_pipeline(QP_Player *player)
                            " ! rtpopuspay"
                            " ! .send_rtp_sink_0 rtpbin"
                            " ! udpsink name=udpsink auto-multicast=true ttl-mc=30"); /* 增加Multicast TTL参数 */
+    break;
+
+  /* 融合输出播放 */
+  //
+  // @since 3.0 增加融合输出模式
+  //            该模式下，播放器将同时输出到本地音频设备和网络广播
+  //            构建的字符串将使用tee组件实现 "分流" 功能
+  //            从player->output_list中获取输出列表
+  //            列表中每一项都是一个字符串,
+  //            本地设备字符串格式: dev://[DEVICE_NAME]
+  //            网络RTP字符串格式: udp://[IP]:[PORT]
+  //
+  case QP_SET_OUTPUT_TYPE_FUSION:
+
+    // 添加tee组件
+    g_string_append_printf(pipeline_string, " ! tee name=t");
+
     break;
   }
 

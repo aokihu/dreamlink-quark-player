@@ -77,12 +77,15 @@ void qp_player_init(QP_Player *player, QP_CmdParam *params)
     player->opt_card_sub = params->card_sub;
     player->opt_alsa_devices = params->alsa_devices;
     break;
+  case QP_SET_OUTPUT_TYPE_FUSION;
+    player->opt_output_list = params->output_list;
+    break;
   }
 
   // 构造各个组件
   qp_player_make_pipeline(player);
 
-  // 播放器出于准备状态
+  // 设置播放器为准备状态
   player->status_ready = TRUE;
   player->status = QP_PLAYER_STATUS_READY;
 }

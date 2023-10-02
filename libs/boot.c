@@ -11,6 +11,7 @@ static GString *qp_cmdopt_src_address;                               // 输入�
 static guint qp_cmdopt_card = 0;                                     // 输出是local模式时的声卡编号
 static guint qp_cmdopt_card_sub = 0;                                 // 输出是local模式时声卡子设备编号
 static gchar **qp_cmdopt_alsa_devices = NULL;                        // ALSA设备名称,当输出模式是'local'模式的时候
+static gchar **qp_cmdopt_output_list = NULL;                         // 输出设备列表
 static guint qp_cmdopt_volume = 60;                                  // 启动时播放器的音量
 static gboolean qp_cmdopt_silent = FALSE;                            // 静默模式
 static QP_SET_INPUT_TYPE qp_cmdopt_input = QP_SET_INPUT_TYPE_URI;    // 输入源类型
@@ -35,28 +36,28 @@ static gboolean qp_boot_cmdopt_check(
   /*----- 通用参数配置 -----*/
 
   // 检查<silent>参数
-  if (!g_ascii_strcasecmp("--silent", option_name) || !g_ascii_strcasecmp("-s", option_name))
+  if (qp_utils_str_equal("--silent", option_name) || qp_utils_str_equal("-s", option_name))
   {
     qp_cmdopt_silent = TRUE;
     return TRUE;
   }
 
   // 检查<uri>参数
-  if (!g_ascii_strcasecmp("--uri", option_name))
+  if (qp_utils_str_equal("--uri", option_name))
   {
     qp_cmdopt_uri = g_string_new(value);
     return TRUE;
   }
 
   // 检查<quality>参数
-  if (!g_ascii_strcasecmp("--quality", option_name) || !g_ascii_strcasecmp("-q", option_name))
+  if (qp_utils_str_equal("--quality", option_name) || qp_utils_str_equal("-q", option_name))
   {
-    if (!g_ascii_strcasecmp("low", value))
+    if (qp_utils_str_equal("low", value))
     {
       qp_cmdopt_quality = QP_SET_QUALITY_LOW;
       return TRUE;
     }
-    else if (!g_ascii_strcasecmp("high", value))
+    else if (qp_utils_str_equal("high", value))
     {
       qp_cmdopt_quality = QP_SET_QUALITY_HIGH;
       return TRUE;
@@ -66,40 +67,63 @@ static gboolean qp_boot_cmdopt_check(
   /*----- 输出组参数配置 -----*/
 
   // 检查<output>参数
-  if (!g_ascii_strcasecmp("--output", option_name) || !g_ascii_strcasecmp("-o", option_name))
+  if (qp_utils_str_equal("--output", option_name) || qp_utils_str_equal("-o", option_name))
   {
-    if (!g_ascii_strcasecmp("local", value))
+    if (qp_utils_str_equal("local", value))
     {
       qp_cmdopt_output = QP_SET_OUTPUT_TYPE_LOCAL;
+      return TRUE;
+    }
+
+    //
+    // @since 3.0
+    // @brief 增加output=fusion输出模式
+    //
+    if (qp_utils_str_equal("fusion", value))
+    {
+      qp_cmdopt_output = QP_SET_OUTPUT_TYPE_FUSION;
       return TRUE;
     }
   }
 
   // 检查<output-address>参数
-  if (!g_ascii_strcasecmp("--output-address", option_name))
+  if (qp_utils_str_equal("--output-address", option_name))
   {
     qp_cmdopt_address = g_string_new(value);
     return TRUE;
   }
   // 检查<output-address6>参数
-  if (!g_ascii_strcasecmp("--output-address6", option_name))
+  if (qp_utils_str_equal("--output-address6", option_name))
   {
     qp_cmdopt_address6 = g_string_new(value);
+    return TRUE;
+  }
+
+  //
+  // @sicne 3.0
+  // @brief 增加output-list参数
+  //        用于输出fusion模式的输出设备列表
+  //
+  if (qp_utils_str_equal("--output-list", option_name))
+  {
+
+    // 初始化输出设备列表
+    qp_cmdopt_output_list = g_strsplit(value, ",", -1);
     return TRUE;
   }
 
   /*----- 输入组参数配置 -----*/
 
   // 检查<input>参数
-  if (!g_ascii_strcasecmp("--input", option_name) || !g_ascii_strcasecmp("-i", option_name))
+  if (qp_utils_str_equal("--input", option_name) || qp_utils_str_equal("-i", option_name))
   {
-    if (!g_ascii_strcasecmp("udp", value))
+    if (qp_utils_str_equal("udp", value))
     {
       qp_cmdopt_input = QP_SET_INPUT_TYPE_UDP;
       return TRUE;
     }
 
-    if (!g_ascii_strcasecmp("fd", value))
+    if (qp_utils_str_equal("fd", value))
     {
       qp_cmdopt_input = QP_SET_INPUT_TYPE_FD;
       return TRUE;
@@ -107,7 +131,7 @@ static gboolean qp_boot_cmdopt_check(
   }
 
   // 检查<src-address>参数
-  if (!g_ascii_strcasecmp("--input-address", option_name))
+  if (qp_utils_str_equal("--input-address", option_name))
   {
     qp_cmdopt_src_address = g_string_new(value);
     return TRUE;
@@ -254,10 +278,18 @@ static GOptionEntry QP_OPTION_OUTPUT_ENTIRES[] = {
         G_OPTION_ARG_STRING_ARRAY,
         &qp_cmdopt_alsa_devices,
         "Set ALSA device, there may be multi device name, sperate with comma. e.g. --alsa-device=card_1 --alsa--device=card_2",
-        "card-name",
+        "[card-name]",
     },
-    {NULL},
-};
+    {
+        "output-list",
+        0,
+        G_OPTION_FLAG_NONE,
+        G_OPTION_ARG_STRING_ARRAY,
+        &qp_cmdopt_output_list,
+        "Set output list, when output mode is 'fusion', default is NULL",
+        "[dev://device_name] [udp://address:port]",
+    },
+    {NULL}};
 
 /**
  * @flow 解析命令行参数
@@ -360,6 +392,27 @@ void qp_flow_print_env(QP_Application *application)
       }
 
       break;
+
+      /**
+       *  @since 3.0.0 增加output=fusion输出调试信息
+       *  @brief 从命令行独居字符串，格式:"dev://SND_1,dev://SND_2,udp://234.0.0.1:55100"
+       *         使用","作为分隔符
+       */
+
+    case QP_SET_OUTPUT_TYPE_FUSION:
+      g_string_append_printf(output_message,
+                             "Output: fusion\n");
+
+      // 打印qp_cmdopt_output_list中的设备信息
+      guint output_idx = 0;
+      guint output_count = g_strv_length(qp_cmdopt_output_list);
+
+      for (; output_idx < output_count; output_idx += 1)
+      {
+        g_string_append_printf(output_message,
+                               "Output device: %s\n", qp_cmdopt_output_list[output_idx]);
+      }
+      break;
     }
 
     /* 输出版本信息 */
@@ -437,6 +490,19 @@ void qp_flow_set_env(QP_Application *app)
     }
   }
 
+  // Fusion输出模式中output_list参数设置
+
+  params->output_list = g_ptr_array_sized_new(4); /* 预保留4个元素的内存空间，但是实际数组长度依然是0 */
+
+  if (qp_cmdopt_output_list != NULL)
+  {
+    char **d;
+    for (d = qp_cmdopt_output_list; *d; d += 1)
+    {
+      g_ptr_array_add(params->output_list, (gpointer)*d);
+    }
+  }
+
   // 播放器初始化
   qp_player_init(app->player, params);
 
@@ -458,6 +524,12 @@ void qp_flow_set_env(QP_Application *app)
  */
 extern void qp_boot(gint argc, gchar **argv, QP_Application *app)
 {
+  /**
+   * Parses the command line arguments and sets the appropriate flags and variables.
+   *
+   * @param argc The number of command line arguments.
+   * @param argv An array of strings containing the command line arguments.
+   */
   qp_flow_parse_cmdline(argc, argv);
 
   if (qp_cmdopt_input == QP_SET_INPUT_TYPE_URI && qp_cmdopt_uri == NULL)

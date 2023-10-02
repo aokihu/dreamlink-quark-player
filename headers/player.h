@@ -65,6 +65,7 @@ typedef struct _QP_Player
   GString *opt_address;          // IPv4输出地址
   GString *opt_address6;         // IPv6输出地址
   GPtrArray *opt_alsa_devices;   // ALSA设备名称数组
+  GPtrArray *opt_output_list;    // 输出列表
   guint opt_card;                // 音频输出设备
   guint opt_card_sub;            // 音频输出子设备
   guint opt_volume;              // 音量
@@ -87,7 +88,16 @@ gboolean qp_player_bus_handler(GstBus *bus, GstMessage *message, gpointer userda
 void qp_player_bus_error_handler(GstMessage *message, gpointer userdata);
 gboolean qp_player_position_handler(gpointer userdata);
 void qp_player_status_changed_handler(GstMessage *message, gpointer userdata);
+
+//
+// @since 2.0
+//
 GString *qp_player_alsa_sink_generate(QP_Player *player); // 生成ALSA Sink字符串
+
+//
+// @since 3.0 增加融合输出功能字符串生成方法
+//
+GString *qp_player_fusion_local_output_generate(QP_Player *player); // 生成本地音频设备输出字符串
 
 //
 // 公开方法
